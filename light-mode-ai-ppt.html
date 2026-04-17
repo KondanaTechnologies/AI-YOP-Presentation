@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Strategy for the Enterprise</title>
+<link rel="icon" type="image/png" href="https://www.kondana.ai/web/image/website/1/favicon?unique=cf52f4d">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f4f6fb;--bg3:#e8ecf4;
+  --text:#111827;--text2:#374151;--text3:#6b7280;
+  --accent:#14b8a6;--accent2:#0f766e;--red:#dc2626;--yellow:#d97706;--blue:#14b8a6;
+  --glass:rgba(20,184,166,.05);--glass2:rgba(20,184,166,.09);
+  --border:rgba(20,184,166,.13);
+  --font-display:'Instrument Serif',Georgia,serif;
+  --font-body:'DM Sans',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.8;overflow-x:hidden;font-size:19px}
+::selection{background:var(--accent);color:#fff}
+a{color:var(--accent);text-decoration:none}
+
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
+
+body::before{display:none;}
+
+/* NAVIGATION */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 2rem;
+  display:flex;align-items:center;gap:2rem;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);
+  transition:transform .4s var(--ease)}
+nav.hidden{transform:translateY(-100%)}
+.nav-logo{font-family:var(--font-display);font-size:1.3rem;color:var(--accent);white-space:nowrap}
+.nav-links{display:flex;gap:.5rem;flex-wrap:wrap}
+.nav-links a{padding:.4rem .8rem;border-radius:20px;font-size:.8rem;font-weight:500;
+  color:var(--text2);transition:all .3s;letter-spacing:.03em;text-transform:uppercase}
+.nav-links a:hover,.nav-links a.active{background:var(--glass2);color:var(--accent)}
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));
+  z-index:1001;transition:width .15s;width:0}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;padding:6rem 2rem;position:relative;overflow:hidden;background:linear-gradient(160deg,#f0fdfa 0%,#ffffff 60%)}
+.hero::before{content:'';position:absolute;top:50%;left:50%;width:800px;height:800px;
+  background:radial-gradient(circle,rgba(20,184,166,.07) 0%,transparent 70%);
+  transform:translate(-50%,-50%);animation:heroPulse 6s ease-in-out infinite}
+@keyframes heroPulse{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}}
+.hero-badge{display:inline-block;padding:.5rem 1.2rem;border:1px solid var(--accent);border-radius:100px;
+  font-size:.8rem;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);
+  margin-bottom:2rem;animation:fadeUp .8s var(--ease) both}
+.hero h1{font-family:var(--font-display);font-size:clamp(3rem,8vw,7rem);line-height:1;
+  margin-bottom:1.5rem;animation:fadeUp .8s var(--ease) .1s both;color:var(--text)}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero p{font-size:1.2rem;color:var(--text2);max-width:600px;animation:fadeUp .8s var(--ease) .2s both}
+.hero-scroll{position:absolute;bottom:3rem;animation:fadeUp .8s var(--ease) .4s both}
+.hero-scroll span{display:block;width:20px;height:32px;border:2px solid var(--text3);border-radius:10px;
+  position:relative;margin:0 auto .5rem}
+.hero-scroll span::after{content:'';position:absolute;top:6px;left:50%;width:3px;height:6px;
+  background:var(--accent);border-radius:2px;transform:translateX(-50%);animation:scrollDot 2s infinite}
+@keyframes scrollDot{0%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(12px)}}
+.hero-scroll small{font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;color:var(--text3)}
+
+/* AGENDA */
+.agenda-list{display:flex;flex-direction:column;gap:1rem;margin:2rem 0}
+.agenda-item{display:flex;align-items:flex-start;gap:1.5rem;padding:1.5rem;background:var(--glass);
+  border:1px solid var(--border);border-radius:14px;transition:all .4s var(--ease)}
+.agenda-item:hover{border-color:rgba(37,99,235,.25);background:var(--glass2)}
+.agenda-num{font-family:var(--font-mono);font-size:1.8rem;color:var(--accent);opacity:.35;line-height:1;flex-shrink:0;min-width:2.5rem}
+.agenda-text{font-size:1.2rem;color:var(--text2);line-height:1.7;padding-top:.2rem}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTIONS */
+section{padding:6rem 2rem;max-width:1200px;margin:0 auto}
+.section-header{margin-bottom:4rem}
+.section-num{font-family:var(--font-mono);font-size:.8rem;color:var(--accent);letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:.5rem;display:block}
+.section-title{font-family:var(--font-display);font-size:clamp(2.6rem,5.5vw,4rem);line-height:1.1;margin-bottom:1rem;color:var(--text)}
+.section-sub{color:var(--text2);font-size:1.25rem;max-width:640px}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin:2rem 0}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;
+  cursor:pointer;transition:all .4s var(--ease);position:relative;overflow:hidden}
+.card:hover{border-color:rgba(37,99,235,.3);transform:translateY(-4px);background:var(--glass2)}
+.card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .4s}
+.card:hover::after{opacity:1}
+.card-icon{font-size:2rem;margin-bottom:1rem}
+.card h3{font-family:var(--font-display);font-size:1.7rem;margin-bottom:.75rem;color:var(--text)}
+.card p{color:var(--text2);font-size:1.1rem;line-height:1.75}
+.card-reveal{max-height:0;overflow:hidden;transition:max-height .5s var(--ease);margin-top:0}
+.card-reveal.open{max-height:500px;margin-top:1rem}
+.card-reveal-inner{padding-top:1rem;border-top:1px solid var(--border);color:var(--accent2);font-size:.95rem}
+.click-hint{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-top:1rem}
+
+/* COMPARE TABLE */
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;margin:2rem 0;
+  background:var(--bg2);border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.compare-table th{padding:1.2rem 1.5rem;text-align:left;font-size:.8rem;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--accent);background:rgba(37,99,235,.05);font-weight:600}
+.compare-table td{padding:1rem 1.5rem;border-top:1px solid var(--border);font-size:1.1rem}
+.compare-table tr:hover td{background:var(--glass)}
+.compare-table td:first-child{color:var(--text2);font-weight:500}
+
+/* FLOW DIAGRAM */
+.flow-container{display:flex;flex-direction:column;gap:2rem;margin:3rem 0;position:relative}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap}
+.flow-node{padding:1rem 2rem;border-radius:12px;font-weight:600;font-size:1rem;
+  cursor:pointer;transition:all .4s var(--ease);text-align:center;min-width:140px;position:relative}
+.flow-node.user{background:linear-gradient(135deg,#e0f2fe,#f0f9ff);border:1px solid rgba(8,145,178,.3);color:#0369a1}
+.flow-node.agent{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid rgba(37,99,235,.4);color:var(--accent);
+  box-shadow:0 0 20px rgba(37,99,235,.12)}
+.flow-node.system{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid rgba(22,163,74,.3);color:#15803d}
+.flow-node:hover{transform:scale(1.05)}
+.flow-arrow{font-size:1.5rem;color:var(--accent);animation:arrowPulse 2s infinite}
+@keyframes arrowPulse{0%,100%{opacity:.4}50%{opacity:1}}
+.flow-node-info{position:absolute;top:110%;left:50%;transform:translateX(-50%);
+  background:#fff;border:1px solid var(--accent);border-radius:10px;padding:1rem;
+  font-size:.9rem;color:var(--text);width:250px;z-index:10;opacity:0;pointer-events:none;
+  transition:all .3s;font-weight:400;box-shadow:0 4px 20px rgba(37,99,235,.15)}
+.flow-node-info.visible{opacity:1;pointer-events:auto}
+
+/* NEW HIRE REVEAL */
+.reveal-list{display:flex;flex-direction:column;gap:1rem;margin:2rem 0}
+.reveal-item{padding:1.2rem 1.5rem;background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;cursor:pointer;transition:all .4s var(--ease);opacity:.3;
+  filter:blur(4px);transform:translateX(-20px)}
+.reveal-item.revealed{opacity:1;filter:blur(0);transform:translateX(0)}
+.reveal-item.final{border-color:var(--accent);background:rgba(37,99,235,.05)}
+.reveal-item .num{font-family:var(--font-mono);font-size:.8rem;color:var(--accent);margin-right:.5rem}
+.reveal-btn{display:inline-block;padding:.7rem 1.5rem;background:var(--accent);color:#fff;
+  border:none;border-radius:100px;font-family:var(--font-body);font-weight:600;font-size:.9rem;
+  cursor:pointer;transition:all .3s;margin-top:1rem}
+.reveal-btn:hover{transform:scale(1.05);box-shadow:0 4px 20px rgba(37,99,235,.3)}
+
+/* SEMANTIC LAYER WIDGET */
+.semantic-widget{margin:3rem 0}
+.term-selector{display:flex;gap:.75rem;margin-bottom:2rem;flex-wrap:wrap}
+.term-btn{padding:.6rem 1.2rem;background:var(--bg2);border:1px solid var(--border);
+  border-radius:100px;color:var(--text2);font-family:var(--font-body);font-size:.9rem;
+  cursor:pointer;transition:all .3s}
+.term-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(37,99,235,.06)}
+.conflict-panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem}
+.conflict-card{padding:1.2rem;background:#fff5f5;border:1px solid var(--red);border-radius:12px;
+  opacity:0;transform:translateY(10px);transition:all .4s var(--ease)}
+.conflict-card.visible{opacity:1;transform:translateY(0)}
+.conflict-card .sys{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--red);margin-bottom:.5rem}
+.conflict-card .def{font-size:.9rem;color:var(--text)}
+.resolved-card{padding:1.5rem;background:rgba(37,99,235,.05);border:1px solid var(--accent);
+  border-radius:12px;text-align:center;opacity:0;transform:scale(.95);transition:all .5s var(--ease)}
+.resolved-card.visible{opacity:1;transform:scale(1)}
+.resolved-card .label{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.5rem}
+.resolved-card .value{font-family:var(--font-display);font-size:1.3rem;color:var(--text)}
+
+/* PILLAR CARDS */
+.pillar-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin:2rem 0}
+.pillar-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;position:relative}
+.pillar-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;
+  background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.pillar-num{font-family:var(--font-mono);font-size:.8rem;color:var(--accent);letter-spacing:.1em;margin-bottom:.75rem;text-transform:uppercase}
+.pillar-card h3{font-family:var(--font-display);font-size:1.7rem;margin-bottom:.75rem;color:var(--text)}
+.pillar-card p{color:var(--text2);font-size:1.1rem;line-height:1.75}
+
+/* TWO-COLUMN LAYOUT */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:2rem 0}
+@media(max-width:768px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem}
+.col-card h4{font-family:var(--font-display);font-size:1.3rem;margin-bottom:1rem;color:var(--text)}
+.col-card ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.col-card ul li{padding:.6rem 1rem;background:var(--bg3);border-radius:8px;font-size:1rem;color:var(--text2)}
+
+/* TOGGLE MENTAL MODEL */
+.toggle-container{margin:3rem 0;perspective:1000px}
+.toggle-btn{display:flex;background:var(--bg2);border-radius:100px;overflow:hidden;
+  border:1px solid var(--border);width:fit-content;margin:0 auto 2rem}
+.toggle-btn button{padding:.8rem 1.5rem;background:none;border:none;color:var(--text2);
+  font-family:var(--font-body);font-size:.9rem;cursor:pointer;transition:all .3s;font-weight:500}
+.toggle-btn button.active{background:var(--accent);color:#fff;border-radius:100px}
+.toggle-panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;
+  padding:2.5rem;transition:all .6s var(--ease);position:relative}
+.toggle-panel h3{font-family:var(--font-display);font-size:1.8rem;margin-bottom:1rem;color:var(--text)}
+.toggle-panel ul{list-style:none;display:flex;flex-direction:column;gap:.75rem}
+.toggle-panel li{padding:.75rem 1rem;background:var(--bg3);border-radius:10px;font-size:1.1rem;
+  display:flex;align-items:center;gap:.75rem;color:var(--text2)}
+.toggle-panel li .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* AGENT COMPARISON TABLE */
+.agent-table{width:100%;border-collapse:separate;border-spacing:0;margin:2rem 0;
+  background:var(--bg2);border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.agent-table th{padding:1.2rem 1.5rem;text-align:left;font-size:.8rem;text-transform:uppercase;
+  letter-spacing:.1em;background:rgba(37,99,235,.05)}
+.agent-table th:first-child{color:var(--text3)}
+.agent-table th:nth-child(2){color:var(--blue)}
+.agent-table th:nth-child(3){color:var(--accent2)}
+.agent-table td{padding:1rem 1.5rem;border-top:1px solid var(--border);font-size:1.1rem;color:var(--text2)}
+.agent-table td:first-child{color:var(--text);font-weight:500}
+.agent-table tr:hover td{background:var(--glass)}
+
+/* WHERE AGENTS SHOW UP */
+.agent-uses{display:flex;flex-direction:column;gap:1rem;margin:2rem 0}
+.agent-use{padding:1.2rem 1.5rem;background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;font-size:1rem;color:var(--text2);display:flex;align-items:flex-start;gap:1rem;
+  transition:all .3s var(--ease)}
+.agent-use:hover{border-color:rgba(37,99,235,.3);color:var(--text)}
+.agent-use-icon{font-size:1.3rem;flex-shrink:0;margin-top:.1rem}
+
+/* FIT TABLE */
+.fit-table{width:100%;border-collapse:separate;border-spacing:0;margin:2rem 0;
+  background:var(--bg2);border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.fit-table th{padding:1.2rem 1.5rem;text-align:left;font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;background:rgba(37,99,235,.04)}
+.fit-table th:nth-child(1){color:var(--accent)}
+.fit-table th:nth-child(2){color:var(--red)}
+.fit-table td{padding:1.1rem 1.5rem;border-top:1px solid var(--border);font-size:1.1rem;color:var(--text2);vertical-align:top}
+.fit-table tr:hover td{background:var(--glass)}
+
+/* CHECKLIST */
+.checklist{margin:2rem 0}
+.check-item{display:flex;align-items:flex-start;gap:1rem;padding:1rem;background:var(--bg2);
+  border:1px solid var(--border);border-radius:12px;margin-bottom:.75rem;cursor:pointer;
+  transition:all .3s var(--ease)}
+.check-item:hover{border-color:rgba(37,99,235,.25)}
+.check-box{width:22px;height:22px;border:2px solid var(--text3);border-radius:6px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;transition:all .3s;margin-top:2px}
+.check-item.checked .check-box{background:var(--accent);border-color:var(--accent)}
+.check-item.checked-red .check-box{background:var(--red);border-color:var(--red)}
+.check-mark{color:#fff;font-size:.75rem;font-weight:700;opacity:0;transition:opacity .2s}
+.check-item.checked .check-mark,.check-item.checked-red .check-mark{opacity:1}
+.check-count{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;
+  background:var(--bg2);border-radius:100px;font-family:var(--font-mono);font-size:.9rem;
+  margin-bottom:1rem;border:1px solid var(--border);color:var(--text2)}
+
+/* FILTER / ASSESSMENT */
+.filter-container{margin:2rem 0}
+.filter-q{background:var(--bg2);border:1px solid var(--border);border-radius:14px;
+  padding:1.5rem;margin-bottom:1rem;transition:all .3s}
+.filter-q-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.filter-q-num{font-family:var(--font-mono);font-size:.8rem;color:var(--accent)}
+.filter-q-badge{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;padding:.25rem .6rem;
+  border-radius:100px;font-weight:600}
+.badge-veto{background:rgba(220,38,38,.1);color:var(--red);border:1px solid rgba(220,38,38,.3)}
+.badge-high{background:rgba(217,119,6,.1);color:var(--yellow);border:1px solid rgba(217,119,6,.3)}
+.badge-standard{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+.filter-q-text{font-size:1rem;margin-bottom:1rem;font-weight:500;color:var(--text)}
+.filter-options{display:flex;flex-direction:column;gap:.5rem}
+.filter-opt{display:flex;align-items:center;gap:.75rem;padding:.7rem 1rem;background:var(--bg3);
+  border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .3s;font-size:.95rem;color:var(--text2)}
+.filter-opt:hover{border-color:var(--text3)}
+.filter-opt.selected-green{border-color:var(--accent);background:rgba(37,99,235,.06)}
+.filter-opt.selected-yellow{border-color:var(--yellow);background:rgba(217,119,6,.06)}
+.filter-opt.selected-red{border-color:var(--red);background:rgba(220,38,38,.06)}
+.filter-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.filter-dot.green{background:var(--accent)}.filter-dot.yellow{background:var(--yellow)}.filter-dot.red{background:var(--red)}
+
+/* VERDICT */
+.verdict-panel{padding:2rem;border-radius:16px;text-align:center;margin:2rem 0;transition:all .5s var(--ease);
+  border:2px solid var(--border);background:var(--bg2)}
+.verdict-panel.green{border-color:var(--accent);background:rgba(37,99,235,.05)}
+.verdict-panel.yellow{border-color:var(--yellow);background:rgba(217,119,6,.05)}
+.verdict-panel.red{border-color:var(--red);background:rgba(220,38,38,.05)}
+.verdict-emoji{font-size:3rem;margin-bottom:.5rem}
+.verdict-text{font-family:var(--font-display);font-size:1.8rem;color:var(--text)}
+.verdict-desc{color:var(--text2);font-size:1rem;margin-top:.75rem;max-width:500px;margin-inline:auto}
+
+/* EXAMPLE TABLE */
+.example-table{width:100%;border-collapse:separate;border-spacing:0;margin:2rem 0;
+  background:var(--bg2);border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.example-table th{padding:1rem;text-align:left;font-size:.8rem;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--text3);background:var(--bg3)}
+.example-table td{padding:.8rem 1rem;border-top:1px solid var(--border);font-size:1rem;color:var(--text2)}
+.example-row{opacity:0;transform:translateX(-20px);transition:all .5s var(--ease)}
+.example-row.visible{opacity:1;transform:translateX(0)}
+.example-row.veto td{background:rgba(220,38,38,.04)}
+.veto-badge-inline{display:inline-block;padding:.15rem .5rem;background:rgba(220,38,38,.1);
+  color:var(--red);border-radius:4px;font-size:.75rem;font-weight:600;margin-left:.5rem}
+
+/* GOOD/BAD PROBLEMS */
+.good-bad-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:2rem 0}
+@media(max-width:768px){.good-bad-grid{grid-template-columns:1fr}}
+.good-bad-col{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem}
+.good-bad-col.good-col{border-color:rgba(37,99,235,.2)}
+.good-bad-col.bad-col{border-color:rgba(220,38,38,.2)}
+.col-header{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:1.5rem;padding:.4rem 1rem;border-radius:100px;width:fit-content}
+.good-col .col-header{background:rgba(37,99,235,.08);color:var(--accent);border:1px solid rgba(37,99,235,.2)}
+.bad-col .col-header{background:rgba(220,38,38,.08);color:var(--red);border:1px solid rgba(220,38,38,.2)}
+.problem-item{padding:1rem;background:var(--bg3);border-radius:10px;margin-bottom:.75rem}
+.problem-item h5{font-size:1rem;font-weight:600;margin-bottom:.35rem}
+.good-col .problem-item h5{color:var(--accent)}
+.bad-col .problem-item h5{color:var(--red)}
+.problem-item p{font-size:.9rem;color:var(--text3);line-height:1.6}
+
+/* CALCULATOR */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem}
+@media(max-width:768px){.calc-grid{grid-template-columns:1fr}}
+.calc-section{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem}
+.calc-section h3{font-family:var(--font-display);font-size:1.4rem;margin-bottom:1.5rem;color:var(--text)}
+.calc-field{margin-bottom:1.2rem}
+.calc-label{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);
+  margin-bottom:.5rem;display:flex;justify-content:space-between}
+.calc-label .val{color:var(--accent);font-family:var(--font-mono)}
+input[type="range"]{width:100%;-webkit-appearance:none;background:var(--bg3);height:4px;
+  border-radius:2px;outline:none}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+  border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 10px rgba(37,99,235,.3)}
+.calc-toggle{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.calc-toggle button{padding:.5rem 1rem;background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;color:var(--text2);font-family:var(--font-body);font-size:.85rem;cursor:pointer;transition:all .3s}
+.calc-toggle button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.calc-select{width:100%;padding:.6rem;background:#fff;border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-family:var(--font-body);outline:none}
+.calc-results{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem}
+@media(max-width:768px){.calc-results{grid-template-columns:1fr}}
+.calc-result-panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center}
+.calc-result-panel h4{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem}
+.calc-big-num{font-family:var(--font-display);font-size:2rem;margin-bottom:.5rem;color:var(--text)}
+.calc-detail{font-size:.8rem;color:var(--text3);margin-top:.25rem;font-family:var(--font-mono)}
+.calc-bar{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin:1rem 0}
+.calc-bar-fill{height:100%;border-radius:4px;transition:width .5s var(--ease)}
+.currency-toggle{display:flex;gap:.5rem;margin:1rem 0;justify-content:flex-end}
+.currency-toggle button{padding:.3rem .8rem;background:var(--bg2);border:1px solid var(--border);
+  border-radius:6px;color:var(--text2);font-size:.8rem;cursor:pointer;transition:all .3s;
+  font-family:var(--font-mono)}
+.currency-toggle button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* WALKTHROUGH */
+.walkthrough{margin:3rem 0}
+.walk-step{padding:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:14px;
+  margin-bottom:1rem;cursor:pointer;transition:all .4s var(--ease);opacity:.5}
+.walk-step.active{opacity:1;border-color:var(--accent);background:rgba(37,99,235,.04)}
+.walk-step.done{opacity:.7}
+.walk-step h4{font-family:var(--font-display);font-size:1.3rem;margin-bottom:.5rem;color:var(--text)}
+.walk-step p{color:var(--text2);font-size:1rem}
+.walk-impact{margin-top:.75rem;padding:.5rem 1rem;background:var(--bg3);border-radius:8px;
+  font-family:var(--font-mono);font-size:.85rem;color:var(--accent);display:none}
+.walk-step.active .walk-impact,.walk-step.done .walk-impact{display:block}
+
+/* TOKEN ANIMATION */
+.token-anim{margin:3rem 0;background:var(--bg2);border-radius:16px;padding:2rem;border:1px solid var(--border)}
+.token-stream{display:flex;flex-wrap:wrap;gap:4px;margin:1rem 0;min-height:60px}
+.token{display:inline-block;padding:4px 8px;border-radius:4px;font-family:var(--font-mono);font-size:.8rem;
+  opacity:0;transform:scale(.8);transition:all .15s}
+.token.visible{opacity:1;transform:scale(1)}
+.token.input-token{background:rgba(37,99,235,.1);color:var(--blue);border:1px solid rgba(37,99,235,.2)}
+.token.output-token{background:rgba(8,145,178,.1);color:var(--accent2);border:1px solid rgba(8,145,178,.2)}
+.token-legend{display:flex;gap:1.5rem;margin-top:1rem;font-size:.85rem;color:var(--text2)}
+.token-cost{margin-top:1rem;font-family:var(--font-mono);font-size:.9rem;color:var(--text2)}
+.token-cost span{color:var(--accent)}
+
+/* STEP COUNTER */
+.step-visual{display:flex;align-items:flex-end;gap:4px;height:200px;margin:1.5rem 0}
+.step-bar{flex:1;background:var(--bg3);border-radius:6px 6px 0 0;transition:all .6s var(--ease);
+  position:relative;min-height:10px}
+.step-bar .cost-label{position:absolute;top:-24px;left:50%;transform:translateX(-50%);
+  font-size:.7rem;font-family:var(--font-mono);color:var(--accent);white-space:nowrap}
+.step-bar.active{background:linear-gradient(180deg,var(--accent),rgba(37,99,235,.3))}
+.step-legend{display:flex;justify-content:center;gap:2rem;margin-top:1rem;font-size:.85rem;color:var(--text2)}
+
+/* OPEN VS CLOSED */
+.ovsc-toggle{display:flex;background:var(--bg2);border-radius:100px;overflow:hidden;
+  border:1px solid var(--border);width:fit-content;margin:0 auto 2rem}
+.ovsc-toggle button{padding:.8rem 2rem;background:none;border:none;color:var(--text2);
+  font-family:var(--font-body);font-size:.95rem;cursor:pointer;transition:all .3s;font-weight:500}
+.ovsc-toggle button.active{background:var(--accent);color:#fff;border-radius:100px}
+.ovsc-content{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;
+  min-height:200px;transition:all .5s var(--ease)}
+.ovsc-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
+.ovsc-item{padding:1rem;background:var(--bg3);border-radius:10px;font-size:1rem;
+  display:flex;align-items:center;gap:.75rem;color:var(--text2)}
+.ovsc-item .icon{font-size:1.2rem}
+
+/* COST STRUCTURE TOGGLE */
+.cost-bars{display:flex;flex-direction:column;gap:1rem;margin-top:1.5rem}
+.cost-bar-row{display:flex;align-items:center;gap:1rem}
+.cost-bar-label{width:180px;font-size:.9rem;color:var(--text2);flex-shrink:0;text-align:right}
+.cost-bar-track{flex:1;height:36px;background:var(--bg3);border-radius:8px;overflow:hidden;position:relative}
+.cost-bar-fill2{height:100%;border-radius:8px;transition:width .8s var(--ease);display:flex;
+  align-items:center;justify-content:flex-end;padding-right:.75rem;font-size:.8rem;font-weight:700;color:#fff}
+
+/* DECISION TOOL */
+.decision-tool{margin:3rem 0}
+.decision-q{background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:1.4rem 1.6rem;margin-bottom:1rem}
+.decision-q-text{font-size:1rem;font-weight:600;margin-bottom:.75rem;color:var(--text)}
+.decision-opts{display:flex;gap:.5rem;flex-wrap:wrap}
+.decision-opt{padding:.55rem 1.1rem;background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;font-size:.9rem;cursor:pointer;transition:all .3s;color:var(--text2)}
+.decision-opt:hover{border-color:var(--text3);color:var(--text)}
+.decision-opt.sel{border-color:var(--accent);background:rgba(37,99,235,.07);color:var(--accent);font-weight:600}
+.decision-result{padding:1.8rem;border-radius:14px;text-align:center;margin-top:1.5rem;
+  background:var(--bg2);border:2px solid var(--border);transition:all .5s var(--ease)}
+.decision-result h4{font-family:var(--font-display);font-size:1.6rem;margin-bottom:.5rem;color:var(--text)}
+.decision-result p{color:var(--text2);font-size:1rem}
+
+/* GAP CARDS */
+.gap-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin:2rem 0}
+.gap-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;
+  min-height:200px;cursor:pointer;transition:all .5s var(--ease);perspective:800px;position:relative}
+.gap-card-inner{position:relative;width:100%;height:100%;min-height:200px;transition:transform .6s var(--ease);
+  transform-style:preserve-3d}
+.gap-card.flipped .gap-card-inner{transform:rotateY(180deg)}
+.gap-card-front,.gap-card-back{padding:2rem;backface-visibility:hidden;position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center}
+.gap-card-back{transform:rotateY(180deg);background:var(--bg3);border-radius:16px}
+.gap-card-front h3{font-family:var(--font-display);font-size:1.4rem;margin-bottom:.5rem;color:var(--text)}
+.gap-card-front .teaser{color:var(--text2);font-size:1rem}
+.gap-card-back p{font-size:.95rem;color:var(--text);line-height:1.7}
+
+/* CONCLUSION */
+.conclusion-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin:2rem 0}
+.concl-item{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;position:relative}
+.concl-num{font-family:var(--font-mono);font-size:2rem;color:var(--accent);opacity:.25;line-height:1;margin-bottom:.75rem}
+.concl-item h4{font-family:var(--font-display);font-size:1.3rem;margin-bottom:.75rem;color:var(--text)}
+.concl-item p{color:var(--text2);font-size:1rem;line-height:1.7}
+
+/* CTA STEPS */
+.cta-steps{display:flex;flex-direction:column;gap:1rem;margin:2rem 0}
+.cta-step{display:flex;align-items:flex-start;gap:1.5rem;padding:1.5rem;background:var(--bg2);
+  border:1px solid var(--border);border-radius:14px;transition:all .3s var(--ease)}
+.cta-step:hover{border-color:rgba(37,99,235,.3)}
+.cta-step-num{font-family:var(--font-mono);font-size:1.5rem;color:var(--accent);opacity:.5;flex-shrink:0;min-width:2rem;line-height:1.2}
+.cta-step-content h4{font-size:1.05rem;font-weight:600;margin-bottom:.35rem;color:var(--text)}
+.cta-step-content p{color:var(--text2);font-size:1rem;line-height:1.6}
+
+/* SECTION DIVIDER */
+.section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:6rem 0}
+
+/* SCROLL ANIMATIONS */
+.animate-in{opacity:0;transform:translateY(40px);transition:all .8s var(--ease)}
+.animate-in.visible{opacity:1;transform:translateY(0)}
+
+/* FOOTER */
+footer{padding:4rem 2rem;text-align:center;border-top:1px solid var(--border);background:var(--bg2)}
+footer p{color:var(--text3);font-size:.9rem}
+
+/* INFO BLOCK */
+.info-block{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:2rem;margin:2rem 0}
+.info-block p{color:var(--text2);font-size:1.15rem;line-height:1.85;margin-bottom:.75rem}
+.info-block p:last-child{margin-bottom:0}
+
+/* KICKER */
+.kicker{font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-top:2rem;
+  padding-top:1.5rem;border-top:1px solid var(--border)}
+
+
+
+@media(max-width:768px){
+  nav{padding:.75rem 1rem}
+  .nav-links{display:none}
+  section{padding:4rem 1.5rem}
+  .hero h1{font-size:2.5rem}
+}</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav id="mainNav">
+  <div class="nav-logo" style="font-family:var(--font-display);font-size:1.3rem;color:var(--accent);white-space:nowrap">
+    AI Strategy
+  </div>
+  <div class="nav-links">
+    <a href="#s1" class="active">LLMs in Business</a>
+    <a href="#s2">Agents</a>
+    <a href="#s3">Good AI Projects</a>
+    <a href="#s4">Economics</a>
+    <a href="#s5">Open vs Closed</a>
+    <a href="#s6">Conclusion</a>
+    <a href="#s7">Case Study</a>
+  </div>
+  <div style="margin-left:auto;">
+    <img src="https://www.kondana.ai/web/image/website/1/logo/kondana?unique=cf52f4d" alt="Kondana Logo" style="height:38px;width:auto;vertical-align:middle;display:inline-block;"/>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-badge">April 2026</div>
+  <h1>AI Strategy for<br>the <em>Enterprise</em></h1>
+  <p>An interactive deep-dive into what works, what doesn't, and what it costs.</p>
+
+
+    <div class="info-block animate-in" style="margin-top:2rem;">
+     
+      <p>AI is changing the world.<br><br>
+      You see it in the headlines, in the products you use, in how your teams work.<br><br>
+      But the question that matters is harder to answer —<br>
+      <strong>Is it changing my world? My business. My industry. My decisions.</strong></p>
+      <div class="kicker">The question behind the question</div>
+    </div>
+</div>
+
+
+<!-- AGENDA -->
+<section>
+  <div class="section-header animate-in">
+
+  <!-- OPENING HOOK -->
+
+    <span class="section-num">The Agenda</span>
+    <h2 class="section-title">Four questions we will<br>sit with today.</h2>
+  </div>
+  <div class="agenda-list animate-in">
+    <div class="agenda-item">
+      <span class="agenda-num">01</span>
+      <span class="agenda-text">Is AI the breakthrough it is made out to be — or does it have limits we should be honest about?</span>
+    </div>
+    <div class="agenda-item">
+      <span class="agenda-num">02</span>
+      <span class="agenda-text">What does it actually take to put AI to work inside an organisation like ours?</span>
+    </div>
+    <div class="agenda-item">
+      <span class="agenda-num">03</span>
+      <span class="agenda-text">Why is this a leadership question? </span>
+    </div>
+    <div class="agenda-item">
+      <span class="agenda-num">04</span>
+      <span class="agenda-text">What does it cost, and what are we trading off to get the benefit?</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== SECTION 1: USING LLMs IN BUSINESS ==================== -->
+<div class="section-divider"></div>
+<section id="s1">
+  <div class="section-header animate-in">
+    <span class="section-num">Section 01</span>
+    <h2 class="section-title">Using LLMs in Business</h2>
+    <p class="section-sub">
+Tools like ChatGPT are built for probabilistic answers — useful, plausible, close enough.<br>
+Business runs on deterministic answers — the same number, every time, traceable to a source.
+</p>
+  </div>
+
+  <!-- The Familiar Challenges -->
+  <div>
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:.5rem">The Familiar Challenges</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">Typical challenges we see when LLMs meet enterprise data.</p>
+    <div class="card-grid">
+      <div class="card" style="cursor:default">
+        <div class="card-icon">🎲</div>
+        <h3>Outputs vary</h3>
+        <p>The same question, asked twice, returns different answers.</p>
+        <div class="card-reveal open" style="max-height:none;margin-top:1rem;">
+          <div class="card-reveal-inner">Root cause: No governed definitions. The model improvises meaning each time. A semantic layer eliminates variance by constraining the model to a single authoritative dictionary.</div>
+        </div>
+      </div>
+      <div class="card" style="cursor:default">
+        <div class="card-icon">📊</div>
+        <h3>Numbers don't match</h3>
+        <p>AI-generated figures disagree with the dashboards the business already trusts.</p>
+        <div class="card-reveal open" style="max-height:none;margin-top:1rem;">
+          <div class="card-reveal-inner">Root cause: Multiple definitions of the same metric. "Revenue" means one thing in Excel, another in the database. Without a governed mapping, the model picks arbitrarily.</div>
+        </div>
+      </div>
+      <div class="card" style="cursor:default">
+        <div class="card-icon">🔍</div>
+        <h3>Answers are untraceable</h3>
+        <p>No one can say where a number came from or how it was derived.</p>
+        <div class="card-reveal open" style="max-height:none;margin-top:1rem;">
+          <div class="card-reveal-inner">Root cause: No audit chain. The model generated an answer but didn't record its source or query path. Without a "show your work" layer, every output is unverifiable.</div>
+        </div>
+      </div>
+    </div>
+    <p class="kicker">Section 1 · The familiar challenges</p>
+  </div>
+
+  <!-- The New Hire Analogy -->
+  <!-- <div class="section-divider"></div> -->
+  <!-- <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:.5rem">The New Hire Analogy</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">A useful way to think about what an LLM actually is.<br>Before the architecture, a frame that makes the rest of this section easier to absorb. An LLM behaves in a specific way — understanding that behaviour explains every design decision that follows.</p>
+    <div class="info-block">
+      <p>Imagine you just hired a brilliant new analyst.</p>
+      <ul style="margin:1.5rem 0 1.5rem 1.5rem;padding:0;list-style:disc;color:var(--text2);font-size:1rem;">
+        <li>Top of their class</li>
+        <li>Articulate and fast</li>
+        <li>Knows nothing about your company</li>
+        <li>Will confidently produce an incorrect answer rather than say it doesn't know</li>
+        <li>Needs to be told where information lives and who owns it</li>
+      </ul>
+      <p style="font-family:var(--font-display);font-size:1.2rem;color:var(--accent);margin-top:1.5rem;">That is an LLM.</p>
+    </div>
+    <p style="color:var(--text2);margin-top:1.5rem">The three pillars that follow describe how you onboard one properly — the handbook, the map, and the review discipline.</p>
+    <p class="kicker">Section 1 · The new hire analogy</p>
+  </div> -->
+
+  <!-- Three Pillars Title Card -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1rem">Onboarding an LLM: three things to get right.</h3>
+    <p style="color:var(--text2);margin-bottom:2rem">To onboard an LLM properly, you need three things: a A handbook, a map, and a review discipline.</p>
+    <div class="pillar-cards">
+      <div class="pillar-card">
+        <div class="pillar-num">Pillar 1</div>
+        <h3>The Handbook</h3>
+        <p>A governed dictionary the model reads from. So "quarterly revenue" means one thing, not seven.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-num">Pillar 2</div>
+        <h3>The Map</h3>
+        <p>A declared set of relationships between the things in your business. So the model knows that the same asset appearing under four different names across four systems is one thing.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-num">Pillar 3</div>
+        <h3>Review Discipline </h3>
+        <p>The review discipline ensures determinism. So the same question returns the same answer, every time, with a traceable source.</p>
+      </div>
+    </div>
+    <p class="kicker">Section 1 · The three pillars</p>
+  </div>
+
+  <!-- Pillar 1: Semantic Layer — INTERACTIVE -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:.5rem">Pillar 1: The Handbook (Semantic Layer)</h3>
+    <p style="color:var(--text2);margin-bottom:1rem">The first thing a new hire needs is a handbook — an authoritative reference for how the business defines its terms. Without one, every answer is a guess.</p>
+    <p style="color:var(--text2);margin-bottom:1.5rem;font-size:.9rem">Select a term — see conflicting definitions, then watch the semantic layer resolve them.</p>
+    <div class="semantic-widget">
+      <div class="term-selector">
+        <button class="term-btn active" onclick="selectTerm('revenue',this)">Quarterly Revenue</button>
+        <button class="term-btn" onclick="selectTerm('customer',this)">Active Customer</button>
+        <button class="term-btn" onclick="selectTerm('status',this)">Project Status</button>
+      </div>
+      <div class="conflict-panel" id="conflictPanel"></div>
+      <div class="resolved-card" id="resolvedCard">
+        <div class="label">✓ Semantic Layer Resolution</div>
+        <div class="value" id="resolvedValue"></div>
+      </div>
+    </div>
+    <p >The rule: The model reads only from the governed dictionary, never from raw data.</p>
+    <p class="kicker">Section 1 · Pillar 1 — The Handbook</p>
+  </div>
+
+  <!-- Pillar 2: Knowledge Graph -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.9rem;margin-bottom:.5rem">Pillar 2: The Knowledge Graph</h3>
+    <p style="color:var(--text2);margin-bottom:.75rem;font-size:1.15rem">The handbook tells the model what things mean. The map tells it how things relate. Without this, the same entity under three different names is three different things.</p>
+    <p style="color:var(--text2);margin-bottom:1.5rem;font-size:1.1rem"><strong>The problem: the same customer exists under different names across systems.</strong></p>
+
+    <!-- Knowledge Graph Table -->
+    <table class="compare-table" style="margin-bottom:2rem;">
+      <thead><tr><th>System</th><th>Name Used</th></tr></thead>
+      <tbody>
+        <tr><td>CRM</td><td>Apex Motors Ltd — Mumbai</td></tr>
+        <tr><td>Billing System</td><td>APXMTL-022</td></tr>
+        <tr><td>Contract Repository</td><td>Apex Motors — Commercial Vehicles Division</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Interactive Knowledge Graph Widget -->
+    <div id="kgWidget" style="margin:2rem 0;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:2rem;">
+      <p style="color:var(--text3);font-size:.85rem;text-align:center;margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:.1em;">Interactive — click Connect to see the graph resolve</p>
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;gap:0;min-height:260px;flex-wrap:nowrap;">
+        <!-- Left: Three system panels -->
+        <div style="display:flex;flex-direction:column;gap:1.2rem;flex-shrink:0;min-width:200px;">
+          <div class="kg-sys-panel" id="kgCRM" style="background:#fff5f5;border:1.5px solid rgba(220,38,38,.25);border-radius:12px;padding:1rem 1.2rem;">
+            <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--red);margin-bottom:.3rem;">CRM</div>
+            <div class="kg-label" style="font-size:.95rem;font-weight:600;color:var(--text);">Apex Motors Ltd — Mumbai</div>
+          </div>
+          <div class="kg-sys-panel" id="kgBilling" style="background:#fff5f5;border:1.5px solid rgba(220,38,38,.25);border-radius:12px;padding:1rem 1.2rem;">
+            <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--red);margin-bottom:.3rem;">Billing System</div>
+            <div class="kg-label" style="font-size:.95rem;font-weight:600;color:var(--text);">APXMTL-022</div>
+          </div>
+          <div class="kg-sys-panel" id="kgContracts" style="background:#fff5f5;border:1.5px solid rgba(220,38,38,.25);border-radius:12px;padding:1rem 1.2rem;">
+            <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--red);margin-bottom:.3rem;">Contract Repository</div>
+            <div class="kg-label" style="font-size:.95rem;font-weight:600;color:var(--text);">Apex Motors — Commercial Vehicles Division</div>
+          </div>
+        </div>
+
+        <!-- SVG connector lines -->
+        <svg id="kgSVG" width="120" height="260" style="flex-shrink:0;overflow:visible;transition:all .6s;">
+          <line id="kgLine1" x1="0" y1="42" x2="120" y2="130" stroke="var(--border)" stroke-width="2" stroke-dasharray="6,4" opacity="0.4"/>
+          <line id="kgLine2" x1="0" y1="130" x2="120" y2="130" stroke="var(--border)" stroke-width="2" stroke-dasharray="6,4" opacity="0.4"/>
+          <line id="kgLine3" x1="0" y1="218" x2="120" y2="130" stroke="var(--border)" stroke-width="2" stroke-dasharray="6,4" opacity="0.4"/>
+        </svg>
+
+        <!-- Central entity icon -->
+        <div id="kgCenter" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.5rem;">
+          <div style="width:90px;height:90px;border-radius:50%;background:var(--glass2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:2.5rem;transition:all .6s var(--ease);">🚗</div>
+          <div id="kgCenterLabel" style="font-size:.8rem;color:var(--text3);text-align:center;max-width:100px;line-height:1.4;transition:all .6s;">One<br>Manufacturer</div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:1.5rem;">
+        <button id="kgConnectBtn" onclick="connectKG()" class="reveal-btn">Connect</button>
+        <p id="kgStatus" style="margin-top:.75rem;font-size:.9rem;color:var(--text3);">Three systems. Three names. One entity — unresolved.</p>
+      </div>
+    </div>
+
+    <script>
+    function connectKG(){
+      const btn = document.getElementById('kgConnectBtn');
+      const connected = btn.textContent === 'Reset';
+      if(!connected){
+        // Animate lines to accent color
+        ['kgLine1','kgLine2','kgLine3'].forEach((id,i)=>{
+          setTimeout(()=>{
+            const l = document.getElementById(id);
+            l.setAttribute('stroke','var(--accent)');
+            l.setAttribute('stroke-dasharray','none');
+            l.setAttribute('opacity','0.8');
+            l.setAttribute('stroke-width','2.5');
+          },i*200);
+        });
+        // Update panels
+        setTimeout(()=>{
+          document.querySelectorAll('.kg-sys-panel').forEach(p=>{
+            p.style.background='rgba(37,99,235,.05)';
+            p.style.borderColor='rgba(37,99,235,.3)';
+          });
+          document.querySelectorAll('.kg-label').forEach(l=>{l.style.color='var(--accent)';});
+          // Resolve center
+          const center = document.getElementById('kgCenter').querySelector('div');
+          center.style.background='rgba(37,99,235,.12)';
+          center.style.borderColor='var(--accent)';
+          center.style.boxShadow='0 0 24px rgba(37,99,235,.2)';
+          document.getElementById('kgCenterLabel').innerHTML='<strong style="color:var(--accent)">Apex Motors Ltd</strong><br><span style="font-size:.7rem;color:var(--accent2)"></span>';
+          document.getElementById('kgStatus').textContent = '✓ All three systems now share one canonical entity.';
+          document.getElementById('kgStatus').style.color = 'var(--accent)';
+        },700);
+        btn.textContent='Reset';
+      } else {
+        ['kgLine1','kgLine2','kgLine3'].forEach(id=>{
+          const l=document.getElementById(id);
+          l.setAttribute('stroke','var(--border)');l.setAttribute('stroke-dasharray','6,4');l.setAttribute('opacity','0.4');l.setAttribute('stroke-width','2');
+        });
+        document.querySelectorAll('.kg-sys-panel').forEach(p=>{p.style.background='#fff5f5';p.style.borderColor='rgba(220,38,38,.25)';});
+        document.querySelectorAll('.kg-label').forEach(l=>{l.style.color='var(--text)';});
+        const center=document.getElementById('kgCenter').querySelector('div');
+        center.style.background='var(--glass2)';center.style.borderColor='var(--border)';center.style.boxShadow='none';
+        document.getElementById('kgCenterLabel').innerHTML='One<br>Manufacturer';
+        document.getElementById('kgCenterLabel').style.color='var(--text3)';
+        document.getElementById('kgStatus').textContent='Three systems. Three names. One entity — unresolved.';
+        document.getElementById('kgStatus').style.color='var(--text3)';
+        btn.textContent='Connect';
+      }
+    }
+    </script>
+
+    <p >The rule: Do not make the AI guess the relationships. Declare them once, use them forever.</p>
+    <p class="kicker">Section 1 · Pillar 2 — The Knowledge Graph</p>
+  </div>
+
+  <!-- Pillar 3: Determinism -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:.5rem">Pillar 3: Review Discipline</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">A handbook and a map get you capability. Determinism is what makes it trustworthy.</p>
+    <div class="card-grid">
+      <div class="card" style="cursor:default">
+        <div class="card-icon">📋</div>
+        <h3>Schema Enforcement</h3>
+        <p>The model returns structured data in a defined format. No prose in place of data. No invented fields.</p>
+      </div>
+      <div class="card" style="cursor:default">
+        <div class="card-icon">🔍</div>
+        <h3>Double-Check Agent</h3>
+        <p>A second agent verifies every answer against the source before it reaches the user. Failed checks are held back.</p>
+      </div>
+      <div class="card" style="cursor:default">
+        <div class="card-icon">🗂</div>
+        <h3>Versioning</h3>
+        <p>Every answer is tied to a version of the data, the handbook, and the map. Answers can be reproduced later.</p>
+      </div>
+    </div>
+    <p>The rule: If the system cannot reproduce an answer, it cannot be trusted with the next one.</p>
+    <p class="kicker">Section 1 · Pillar 3 — Review Discipline</p>
+  </div>
+
+  <!-- What Is Working -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:.5rem">What Is Working</h3>
+    <p style="color:var(--text2);margin-bottom:2rem">Current systems answer questions in ways that require either technical skill or pre-built screens.<br>An AI agent sits between the user and those systems, translating plain language into governed queries.<br>
+
+    <div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:2rem;">
+      <div style="flex:1;min-width:260px;background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:1.5rem;box-shadow:0 2px 16px 0 rgba(0,0,0,0.04);">
+        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem;">
+          <span style="font-size:1.5rem;">👤</span>
+          <span style="font-weight:600;">User → Database / Software → Answer</span>
+        </div>
+        <div style="color:var(--text3);font-size:.97rem;">Flexible, but slow and skill-gated</div>
+      </div>
+      <div style="flex:1;min-width:260px;background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:1.5rem;box-shadow:0 2px 16px 0 rgba(0,0,0,0.04);">
+        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem;">
+          <span style="font-size:1.5rem;">💻</span>
+          <span style="font-weight:600;">Software → Database → Answer</span>
+        </div>
+        <div style="color:var(--text3);font-size:.97rem;">Fast, but rigid — someone had to build the screen</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:2.5rem;text-align:center;">
+      <!-- <span style="display:inline-block;background:var(--accent);color:var(--bg);padding:.5rem 1.5rem;border-radius:100px;font-weight:600;font-size:1.1rem;box-shadow:0 2px 16px 0 rgba(196,245,74,.08);margin-bottom:1rem;">The New Pattern</span> -->
+      <p>New Pattern</p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:1.5rem;">
+        <span style="font-size:1.5rem;">👤</span>
+        <span style="font-size:1.3rem;font-weight:600;">⇄</span>
+        <span style="font-size:1.5rem;">🤖</span>
+        <span style="font-size:1.3rem;font-weight:600;">⇄</span>
+        <span style="font-size:1.5rem;">💻</span>
+      </div>
+      <div style="margin-top:.7rem;color:var(--text2);font-size:1rem;">User &harr; AI Agent &harr; Database / Software</div>
+    </div>
+
+    <div style="background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 16px 0 rgba(0,0,0,0.04);">
+      <div style="font-size:1.25rem;font-weight:700;margin-bottom:1.2rem;color:var(--accent)">Human in the Loop Systems don't happen by accident. They require three deliberate design choices:</div>
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        <div style="display:flex;align-items:center;gap:1rem;padding:1.1rem 1.4rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;">
+          <span style="font-family:var(--font-mono);font-size:1.4rem;color:var(--accent);opacity:.6;min-width:1.8rem;">1)</span>
+          <span style="font-size:1.15rem;font-weight:700;color:var(--text);">A Defined Division of Labour</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;padding:1.1rem 1.4rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;">
+          <span style="font-family:var(--font-mono);font-size:1.4rem;color:var(--accent);opacity:.6;min-width:1.8rem;">2)</span>
+          <span style="font-size:1.15rem;font-weight:700;color:var(--text);">Shared Context</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;padding:1.1rem 1.4rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;">
+          <span style="font-family:var(--font-mono);font-size:1.4rem;color:var(--accent);opacity:.6;min-width:1.8rem;">3)</span>
+          <span style="font-size:1.15rem;font-weight:700;color:var(--text);">Explicit Review Points</span>
+        </div>
+      </div>
+    </div>
+    <p class="kicker">Section 1 · What is working</p>
+  </div>
+
+  <!-- Why It Works: Shared Context -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">Why It Works: Shared Context</h3>
+    <p style="color:var(--text2);margin-bottom:1.2rem">Why it works: neither side can do this alone.<br>The user and the agent cover each other's blind spots. Each brings capabilities the other does not have.</p>
+    <div style="overflow-x:auto;margin-bottom:1.2rem;">
+      <table class="compare-table" style="min-width:420px;">
+        <thead>
+          <tr>
+            <th style=""></th>
+            <th style="text-align:center">The User Brings</th>
+            <th style="text-align:center">The AI Agent Brings</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Domain intent</td><td style="text-align:center;vertical-align:middle;">✓</td><td style="text-align:center;vertical-align:middle;"></td></tr>
+          <tr><td>Business judgment</td><td style="text-align:center;vertical-align:middle;">✓</td><td style="text-align:center;vertical-align:middle;"></td></tr>
+          <tr><td>Institutional memory</td><td style="text-align:center;vertical-align:middle;">✓</td><td style="text-align:center;vertical-align:middle;"></td></tr>
+          <tr><td>Data awareness</td><td style="text-align:center;vertical-align:middle;"></td><td style="text-align:center;vertical-align:middle;">✓</td></tr>
+          <tr><td>Query construction</td><td style="text-align:center;vertical-align:middle;"></td><td style="text-align:center;vertical-align:middle;">✓</td></tr>
+          <tr><td>Source attribution</td><td style="text-align:center;vertical-align:middle;"></td><td style="text-align:center;vertical-align:middle;">✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color:var(--text2);margin-bottom:1.2rem">Neither column is the whole job. Put them together, and the work gets done.</p>
+    <p class="kicker">Section 1 · Why it works — shared context</p>
+  </div>
+
+  <!-- The Reframe -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">The Reframe</h3>
+    <!-- <p style="color:var(--text2);margin-bottom:1.2rem">One shift in how to think about the technology itself.<br>Before we move to where AI belongs and where it doesn't, a shift in mental model. How most people think about LLMs today, and how the ones getting value from them actually think about them.</p> -->
+    <div style="overflow-x:auto;margin-bottom:1.2rem;">
+      <table class="compare-table" style="min-width:420px;">
+        <thead>
+          <tr>
+            <th>Current Mental Model</th>
+            <th>Improved Mental Model</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A search engine</td>
+            <td>A reasoning controller on top of a governed data layer</td>
+          </tr>
+          <tr>
+            <td>Something that knows your business</td>
+            <td>Something that reasons about your business</td>
+          </tr>
+          <tr>
+            <td>A system that generates its own answers</td>
+            <td>A system constrained by a source of truth it cannot override</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- <p style="color:var(--text2);margin-bottom:1.2rem">The difference is not cosmetic. It changes what you expect, what you build, and what you measure.</p> -->
+    <p class="kicker">Section 1 · The reframe</p>
+  </div>
+
+  <!-- The Payoff -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">The Payoff</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">Ensuring deterministic outputs gives you three things that the architecture — not the model — delivers.</p>
+    <table class="compare-table">
+      <thead><tr><th>Property</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr><td>Deterministic</td><td>Same question, same answer, every time</td></tr>
+        <tr><td>Auditable</td><td>Every answer traces back to a source</td></tr>
+        <tr><td>Governed</td><td>The business owns the definitions, not the model</td></tr>
+      </tbody>
+    </table>
+    <p style="color:var(--text2);margin:1.5rem 0 1rem">Ask the same question three times. Watch what happens under each architecture.</p>
+    <table class="compare-table">
+      <thead><tr><th>Run</th><th>Governed Architecture</th><th>Ungoverned Architecture</th></tr></thead>
+      <tbody>
+        <tr><td>Run 1</td><td style="color:var(--accent2)">Revenue: ₹142.3 Cr · Source: vw_quarterly_revenue · 09:14 IST</td><td style="color:var(--red)">Revenue: approximately ₹142 Cr</td></tr>
+        <tr><td>Run 2</td><td style="color:var(--accent2)">Revenue: ₹142.3 Cr · Source: vw_quarterly_revenue · 09:14 IST</td><td style="color:var(--red)">Revenue: around ₹140 Cr, subject to classification</td></tr>
+        <tr><td>Run 3</td><td style="color:var(--accent2)">Revenue: ₹142.3 Cr · Source: vw_quarterly_revenue · 09:14 IST</td><td style="color:var(--red)">Revenue: ₹143.1 Cr based on the latest figures</td></tr>
+      </tbody>
+    </table>
+    <p>The model is the same in both columns. What surrounds it is not.</p>
+    <p class="kicker">Section 1 · The payoff</p>
+
+    <div style="margin:2.2rem 0 2.5rem 0;display:flex;justify-content:center;">
+      <div style="background:linear-gradient(100deg,#f0f4ff 60%,#e0f7fa 100%);border-radius:22px;box-shadow:0 4px 32px 0 rgba(37,99,235,0.10);padding:2.5rem 2.7rem;min-width:340px;max-width:700px;display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-30px;right:-30px;opacity:0.12;font-size:7rem;pointer-events:none;">🔒</div>
+        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.8rem;">
+          <span style="font-size:2.1rem;">🎯</span>
+          <span style="font-size:1.35rem;font-weight:700;color:var(--blue);letter-spacing:.01em;">From <span style='color:#f59e42;'>Probabilistic</span> to <span style='color:#22c55e;'>Deterministic</span></span>
+        </div>
+        <div style="font-size:1.08rem;color:var(--text2);margin-bottom:1.5rem;text-align:center;max-width:520px;">Unlock reliability and repeatability in AI outcomes by leveraging these three foundational pillars.</div>
+        <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;width:100%;">
+          <div style="flex:1 1 160px;min-width:150px;max-width:200px;background:rgba(99,102,241,0.09);border-radius:14px;padding:1.1rem 1.1rem 1.1rem 1.1rem;display:flex;flex-direction:column;align-items:center;box-shadow:0 2px 8px 0 rgba(99,102,241,0.07);">
+            <span style="font-size:1.7rem;margin-bottom:.4rem;">🤝</span>
+            <span style="font-weight:600;color:#6366f1;font-size:1.08rem;margin-bottom:.2rem;">Pillar 1</span>
+            <span style="font-size:1.01rem;color:#334155;text-align:center;">Shared Context</span>
+          </div>
+          <div style="flex:1 1 160px;min-width:150px;max-width:200px;background:rgba(16,185,129,0.09);border-radius:14px;padding:1.1rem 1.1rem 1.1rem 1.1rem;display:flex;flex-direction:column;align-items:center;box-shadow:0 2px 8px 0 rgba(16,185,129,0.07);">
+            <span style="font-size:1.7rem;margin-bottom:.4rem;">🧭</span>
+            <span style="font-weight:600;color:#10b981;font-size:1.08rem;margin-bottom:.2rem;">Pillar 2</span>
+            <span style="font-size:1.01rem;color:#334155;text-align:center;">Determinism</span>
+          </div>
+          <div style="flex:1 1 160px;min-width:150px;max-width:200px;background:rgba(245,158,66,0.09);border-radius:14px;padding:1.1rem 1.1rem 1.1rem 1.1rem;display:flex;flex-direction:column;align-items:center;box-shadow:0 2px 8px 0 rgba(245,158,66,0.07);">
+            <span style="font-size:1.7rem;margin-bottom:.4rem;">🛡️</span>
+            <span style="font-weight:600;color:#f59e42;font-size:1.08rem;margin-bottom:.2rem;">Pillar 3</span>
+            <span style="font-size:1.01rem;color:#334155;text-align:center;">Oversight</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+</section>
+
+<!-- ==================== SECTION 2: AGENTS ==================== -->
+<div class="section-divider"></div>
+<section id="s2">
+  <div class="section-header animate-in">
+    <span class="section-num">Section 02</span>
+    <h2 class="section-title">Agents in Business<br><em>Environments</em></h2>
+    <p class="section-sub">Moving from a model that answers questions to a system that does the work.</p>
+  </div>
+
+  <!-- LLM vs Agent -->
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:.5rem">LLM vs Agent</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">An LLM answers a question. An agent completes a task.</p>
+    <table class="agent-table">
+      <thead><tr><th>Dimension</th><th>LLM</th><th>Agent</th></tr></thead>
+      <tbody>
+        <tr><td>Orientation</td><td>Responds to a prompt</td><td>Follows a goal</td></tr>
+        <tr><td>State</td><td>Stateless — each call stands alone</td><td>Stateful — remembers what it has done</td></tr>
+        <tr><td>Output</td><td>Returns text</td><td>Returns an outcome</td></tr>
+        <tr><td>Action</td><td>Needs a human to act on the output</td><td>Can take action, within defined limits</td></tr>
+      </tbody>
+    </table>
+    <p class="kicker">Section 2 · LLM vs agent</p>
+  </div>
+
+  <!-- How an Agent Uses an LLM -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:.5rem">How an Agent Uses an LLM</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">The LLM is the reasoning engine inside the agent. The agent wraps three things around it.</p>
+    <div class="card-grid">
+      <div class="card" style="cursor:default">
+        <div class="card-icon">🔧</div>
+        <h3>Tools</h3>
+        <p>Connections to the systems where work actually happens — databases, applications, APIs, email, documents.</p>
+      </div>
+      <div class="card" style="cursor:default">
+        <div class="card-icon">🧠</div>
+        <h3>Memory</h3>
+        <p>A record of what has been done in the current task and, where relevant, across past tasks.</p>
+      </div>
+      <div class="card" style="cursor:default">
+        <div class="card-icon">🔄</div>
+        <h3>A Loop</h3>
+        <p>The ability to plan, act, check the result, and adjust — rather than returning a single answer and stopping.</p>
+      </div>
+    </div>
+    <p >The LLM decides what to do at each step. The agent handles how to do it.</p>
+    <p class="kicker">Section 2 · How an agent uses an LLM</p>
+  </div>
+
+  <!-- From Standalone Model to Workflow -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">From Standalone Model to Workflow</h3>
+    <table class="agent-table">
+      <thead><tr><th>Dimension</th><th>Standalone Model</th><th>Agent in a Workflow</th></tr></thead>
+      <tbody>
+        <tr><td>Scope</td><td>One question, one answer</td><td>One goal, many steps</td></tr>
+        <tr><td>Human role</td><td>Human runs every step</td><td>Human sets the goal and reviews the outcome</td></tr>
+        <tr><td>Output form</td><td>Text on a screen</td><td>Work completed in a system</td></tr>
+        <tr><td>Best used for</td><td>Drafting, summarising, explaining</td><td>Research, reconciliation, routine decisions</td></tr>
+      </tbody>
+    </table>
+    <p >The value shifts from helping a person do a task faster to completing a task on the person's behalf, with the person in oversight.</p>
+    <p class="kicker">Section 2 · From standalone model to workflow</p>
+  </div>
+
+  <!-- Where Agents Show Up First -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">Where Agents Show Up First</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">The common thread: work that is repetitive enough to automate, but too varied for a fixed script.</p>
+    <div class="agent-uses">
+      <div class="agent-use">
+        <span class="agent-use-icon">🔗</span>
+        <span>Pulling information from multiple systems to answer a single business question</span>
+      </div>
+      <div class="agent-use">
+        <span class="agent-use-icon">✅</span>
+        <span>Running a sequence of checks that a human would otherwise do manually</span>
+      </div>
+      <div class="agent-use">
+        <span class="agent-use-icon">📝</span>
+        <span>Preparing a draft — a report, a response, a reconciliation — for a human to review and release</span>
+      </div>
+      <div class="agent-use">
+        <span class="agent-use-icon">🔔</span>
+        <span>Monitoring a process and flagging exceptions for attention</span>
+      </div>
+    </div>
+    <p class="kicker">Section 2 · Where agents show up first</p>
+  </div>
+</section>
+
+<!-- ==================== SECTION 3: GOOD AI PROJECTS ==================== -->
+<div class="section-divider"></div>
+<section id="s3">
+  <div class="section-header animate-in">
+    <span class="section-num">Section 03</span>
+    <h2 class="section-title">What Makes for a<br><em>Good AI Project</em></h2>
+    <p class="section-sub">A practical framework for deciding, before resources are committed, whether AI is the right tool at all.</p>
+  </div>
+
+  <!-- Fit and Misfit -->
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">Fit and Misfit</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">A side-by-side view of the characteristics that make a problem a genuine AI fit, and the ones that signal a different tool is needed.</p>
+    <table class="fit-table">
+      <thead><tr><th>✓ AI Fits When</th><th>✗ AI Is the Wrong Tool When</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Input is unstructured</strong> — language, documents, images, voice</td><td><strong>Input is structured output deterministic</strong> — existing code or SQL handles this</td></tr>
+        <tr><td><strong>Rules context-dependent</strong> rather than fully codified</td><td><strong>Rules are clear</strong> and stable — a rules engine is more reliable and auditable</td></tr>
+        <tr><td><strong>Approximate answers</strong> are useful; exact precision is not required</td><td><strong>Wrong answer consequences</strong> — a single wrong answer carries financial, legal, or safety consequences</td></tr>
+        <tr><td><strong>Volume is high</strong> and the cost of a single wrong answer is low</td><td><strong>Process is broken</strong> — no tool fixes a broken workflow</td></tr>
+        <tr><td><strong>Person reviews overrides</strong> before action is taken</td><td><strong>Full explainability</strong> — regulation requires full explainability of every decision</td></tr>
+        <tr><td><strong>Source of truth exists</strong> to verify outputs against</td><td><strong>No source of truth</strong> exists to verify outputs</td></tr>
+      </tbody>
+    </table>
+    <p class="kicker">Section 3 · Fit and misfit</p>
+  </div>
+
+  <!-- Four Failure Modes -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">Four Failure Modes</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">The patterns that appear when AI is applied to the wrong problem — or the right problem in the wrong way.</p>
+    <div class="card-grid">
+      <div class="card" style="cursor:default">
+        <div class="card-icon">🪄</div>
+        <h3>The Automation Illusion</h3>
+        <p>Replacing a human whose judgment work was invisible.</p>
+        <div class="card-reveal open" style="max-height:none;margin-top:1rem;">
+          <div class="card-reveal-inner">The AI handles the visible portion. The invisible portion — the context, the exceptions, the quiet catches — is what prevented errors.</div>
+        </div>
+      </div>
+      <div class="card" style="cursor:default">
+        <div class="card-icon">📉</div>
+        <h3>The Dashboard Detour</h3>
+        <p>Using AI to answer questions an existing dashboard already answered deterministically.</p>
+        <div class="card-reveal open" style="max-height:none;margin-top:1rem;">
+          <div class="card-reveal-inner">Reliability is traded for novelty. Adding cost and uncertainty to a solved problem.</div>
+        </div>
+      </div>
+      <div class="card" style="cursor:default">
+        <div class="card-icon">⚖️</div>
+        <h3>The Compliance Gap</h3>
+        <p>Placing AI in a regulated decision path without an explainability layer.</p>
+        <div class="card-reveal open" style="max-height:none;margin-top:1rem;">
+          <div class="card-reveal-inner">It works until the first audit. The moment an auditor asks "why?" and the answer is "the model decided," the project is over.</div>
+        </div>
+      </div>
+      <div class="card" style="cursor:default">
+        <div class="card-icon">🔧</div>
+        <h3>Rules in Disguise</h3>
+        <p>Using AI for a problem that is a fixed set of conditional rules.</p>
+        <div class="card-reveal open" style="max-height:none;margin-top:1rem;">
+          <div class="card-reveal-inner">A rules engine would be faster, cheaper, and fully auditable. AI is overkill here.</div>
+        </div>
+      </div>
+    </div>
+    <p class="kicker">Section 3 · Four failure modes</p>
+  </div>
+
+  <!-- 2.6-2.8 The 8 Questions Filter -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:.5rem">The 8-Question Filter</h3>
+    <p>Most AI deployment decisions are made on instinct or vendor recommendation. This filter replaces that with a structured assessment.</p>
+    <p style="color:var(--text2);margin-bottom:2rem">Select an answer for each question. The verdict updates live. Three questions are vetoes — a single red answer overrides everything.</p>
+    <div class="filter-container" id="filterContainer"></div>
+    <div class="verdict-panel" id="verdictPanel">
+      <div class="verdict-emoji">🔘</div>
+      <div class="verdict-text">Answer the questions above</div>
+      <div class="verdict-desc">Select at least one answer to see your verdict.</div>
+    </div>
+  </div>
+
+  <!-- Good Problems and Bad Problems -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">Good Problems and Bad Problems</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">The good column shares the same features every time — unstructured input, a human in the loop, a source of truth, reversible action. The bad column fails on one or more of the veto questions.</p>
+    <div class="good-bad-grid">
+      <div class="good-bad-col good-col">
+        <div class="col-header">✓ Good Problems to Solve with AI</div>
+        <div class="problem-item">
+          <h5>Contract Review</h5>
+          <p>Flag deviations from the standard template; a lawyer reviews every flag. Unstructured input, fuzzy rules, human in the loop, every answer traces to a source.</p>
+        </div>
+        <div class="problem-item">
+          <h5>Customer Support Triage</h5>
+          <p>Classify incoming tickets by intent, route to the right queue, surface relevant history to the agent. High volume, low stakes per item, human acts on the output.</p>
+        </div>
+        <div class="problem-item">
+          <h5>Field Engineer Knowledge Assistant</h5>
+          <p>Search service manuals, past incident reports, and parts catalogues to help diagnose equipment faults. Unstructured corpus, verifiable against source documents, engineer retains judgment.</p>
+        </div>
+        <div class="problem-item">
+          <h5>Quarterly Variance Commentary</h5>
+          <p>Generate a first draft of the narrative explaining why a line item moved, with source citations for every figure. Fuzzy by nature, human edits before publication, verifiable.</p>
+        </div>
+      </div>
+      <div class="good-bad-col bad-col">
+        <div class="col-header">✗ Bad Problems to Solve with AI</div>
+        <div class="problem-item">
+          <h5>Direct Posting to the General Ledger</h5>
+          <p>Read invoices and post to the GL without human review. Financial consequences, no human review, and a rules engine already does this better.</p>
+        </div>
+        <div class="problem-item">
+          <h5>Credit Approval Decisions</h5>
+          <p>Approve or deny loans using an AI model without an explainability layer. Regulatory exposure, irreversible consequences, no audit defence.</p>
+        </div>
+        <div class="problem-item">
+          <h5>Automated Price Changes on Live Products</h5>
+          <p>Adjust prices across a catalogue in real time based on demand signals. High cost of a wrong answer, reversibility is costly, fits a rules engine better.</p>
+        </div>
+        <div class="problem-item">
+          <h5>Safety-Critical Shutdown Decisions</h5>
+          <p>Use AI to decide whether to halt a production line based on sensor data. Safety consequences, no room for probabilistic answers, deterministic logic is mandatory.</p>
+        </div>
+      </div>
+    </div>
+    <p class="kicker">Section 3 · Good problems, bad problems</p>
+  </div>
+</section>
+
+<!-- ==================== SECTION 4: ECONOMICS ==================== -->
+<div class="section-divider"></div>
+<section id="s4">
+  <div class="section-header animate-in">
+    <span class="section-num">Section 04</span>
+    <h2 class="section-title">The Economics<br>of <em>AI</em></h2>
+    <p class="section-sub">What it costs to run AI in production, and how to build an honest business case around it.</p>
+  </div>
+
+  <!-- AI as Operating Expense -->
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1rem">AI is an operating expense now, it varies with</h3>
+    <div class="info-block">
+      <ul style="margin-left:1.2em;">
+        <li>Usage Volume</li>
+        <li>Prompt Size</li>
+        <li>Model Choice</li>
+        <li>Agent Complexity</li>
+      </ul>
+    </div>
+    <p class="kicker">Section 4 · AI as operating expense</p>
+  </div>
+
+  <!-- 3.2 Token Animation -->
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1rem">What You Are Paying For</h3>
+    <p style="color:var(--text2);margin-bottom:1rem">Every request is billed in tokens — roughly 4 characters each. Watch a single request play out.</p>
+    <button class="reveal-btn" onclick="animateTokens()">▶ Animate a Request</button>
+    <div class="token-anim">
+      <div class="token-stream" id="tokenStream"></div>
+      <div class="token-legend">
+        <span><span style="display:inline-block;width:12px;height:12px;background:rgba(74,158,245,.4);border-radius:2px;margin-right:4px;vertical-align:middle"></span> Input tokens (context sent)</span>
+        <span><span style="display:inline-block;width:12px;height:12px;background:rgba(196,245,74,.4);border-radius:2px;margin-right:4px;vertical-align:middle"></span> Output tokens (response)</span>
+      </div>
+      <div class="token-cost" id="tokenCost"></div>
+    </div>
+  </div>
+
+  <!-- 3.3 Agentic Cost Problem -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1rem">The Agentic Cost Problem</h3>
+    <p style="color:var(--text2);margin-bottom:1rem">Each agentic step re-reads all previous context. The chart below shows how costs compound as steps increase.</p>
+    <!-- <span style="display:inline-block;background:var(--accent);color:var(--bg);padding:.4rem 1.2rem;border-radius:100px;font-weight:600;font-size:1rem;margin-bottom:.7rem;">Step 10 / 10</span> -->
+    <div class="step-visual" style="margin-bottom:1rem;align-items:end;display:flex;gap:4px;">
+      <div style="background:var(--glass);border-radius:6px 6px 0 0;position:relative;min-height:10px;height:24px;flex:1 1 0;display:flex;align-items:flex-end;justify-content:center;"><div style="background:var(--accent);height:100%;border-radius:6px 6px 0 0;width:60%;"></div></div>
+      <div style="background:var(--glass);border-radius:6px 6px 0 0;position:relative;min-height:10px;height:48px;flex:1 1 0;display:flex;align-items:flex-end;justify-content:center;"><div style="background:var(--accent);height:100%;border-radius:6px 6px 0 0;width:60%;"></div></div>
+      <div style="background:var(--glass);border-radius:6px 6px 0 0;position:relative;min-height:10px;height:72px;flex:1 1 0;display:flex;align-items:flex-end;justify-content:center;"><div style="background:var(--accent);height:100%;border-radius:6px 6px 0 0;width:60%;"></div></div>
+      <div style="background:var(--glass);border-radius:6px 6px 0 0;position:relative;min-height:10px;height:96px;flex:1 1 0;display:flex;align-items:flex-end;justify-content:center;"><div style="background:var(--accent);height:100%;border-radius:6px 6px 0 0;width:60%;"></div></div>
+      <div style="background:var(--glass);border-radius:6px 6px 0 0;position:relative;min-height:10px;height:120px;flex:1 1 0;display:flex;align-items:flex-end;justify-content:center;"><div style="background:var(--accent);height:100%;border-radius:6px 6px 0 0;width:60%;"></div></div>
+      <div style="background:var(--glass);border-radius:6px 6px 0 0;position:relative;min-height:10px;height:144px;flex:1 1 0;display:flex;align-items:flex-end;justify-content:center;"><div style="background:var(--accent);height:100%;border-radius:6px 6px 0 0;width:60%;"></div></div>
+      <div style="background:var(--glass);border-radius:6px 6px 0 0;position:relative;min-height:10px;height:168px;flex:1 1 0;display:flex;align-items:flex-end;justify-content:center;"><div style="background:var(--accent);height:100%;border-radius:6px 6px 0 0;width:60%;"></div></div>
+      <div style="background:var(--glass);border-radius:6px 6px 0 0;position:relative;min-height:10px;height:192px;flex:1 1 0;display:flex;align-items:flex-end;justify-content:center;"><div style="background:var(--accent);height:100%;border-radius:6px 6px 0 0;width:60%;"></div></div>
+      <div style="background:var(--glass);border-radius:6px 6px 0 0;position:relative;min-height:10px;height:216px;flex:1 1 0;display:flex;align-items:flex-end;justify-content:center;"><div style="background:var(--accent);height:100%;border-radius:6px 6px 0 0;width:60%;"></div></div>
+      <div style="background:var(--glass);border-radius:6px 6px 0 0;position:relative;min-height:10px;height:240px;flex:1 1 0;display:flex;align-items:flex-end;justify-content:center;"><div style="background:var(--accent);height:100%;border-radius:6px 6px 0 0;width:60%;"></div></div>
+    </div>
+    <div style="display:flex;gap:4px;margin-bottom:.5rem;">
+      <span style="flex:1 1 0;min-width:0;display:inline-block;text-align:center;font-family:var(--font-mono);font-size:.95rem;color:var(--accent2);">0.024$</span>
+      <span style="flex:1 1 0;min-width:0;display:inline-block;text-align:center;font-family:var(--font-mono);font-size:.95rem;color:var(--accent2);">0.048$</span>
+      <span style="flex:1 1 0;min-width:0;display:inline-block;text-align:center;font-family:var(--font-mono);font-size:.95rem;color:var(--accent2);">0.072$</span>
+      <span style="flex:1 1 0;min-width:0;display:inline-block;text-align:center;font-family:var(--font-mono);font-size:.95rem;color:var(--accent2);">0.096$</span>
+      <span style="flex:1 1 0;min-width:0;display:inline-block;text-align:center;font-family:var(--font-mono);font-size:.95rem;color:var(--accent2);">0.120$</span>
+      <span style="flex:1 1 0;min-width:0;display:inline-block;text-align:center;font-family:var(--font-mono);font-size:.95rem;color:var(--accent2);">0.144$</span>
+      <span style="flex:1 1 0;min-width:0;display:inline-block;text-align:center;font-family:var(--font-mono);font-size:.95rem;color:var(--accent2);">0.168$</span>
+      <span style="flex:1 1 0;min-width:0;display:inline-block;text-align:center;font-family:var(--font-mono);font-size:.95rem;color:var(--accent2);">0.192$</span>
+      <span style="flex:1 1 0;min-width:0;display:inline-block;text-align:center;font-family:var(--font-mono);font-size:.95rem;color:var(--accent2);">0.216$</span>
+      <span style="flex:1 1 0;min-width:0;display:inline-block;text-align:center;font-family:var(--font-mono);font-size:.95rem;color:var(--accent2);">0.240$</span>
+    </div>
+    <div class="step-legend">
+      <span>Each bar = one step's total token cost (cumulative context)</span>
+    </div>
+  </div>
+
+  <!-- The AI Cost Calculator — INTERACTIVE -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">The AI Cost Calculator</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">Eight levers on the AI cost side. Adjust them and watch the bill move.</p>
+    <div class="currency-toggle">
+      <button class="active" onclick="setCurrency('USD',this)">$ USD</button>
+    </div>
+    <div class="calc-grid">
+      <div class="calc-section">
+        <h3>🤖 AI Cost Levers</h3>
+        <div class="calc-field">
+          <div class="calc-label">Runs per day <span class="val" id="runsVal">200</span></div>
+          <input type="range" min="10" max="10000" value="200" step="10" oninput="document.getElementById('runsVal').textContent=this.value;calcUpdate()">
+        </div>
+        <div class="calc-field">
+          <div class="calc-label">Steps per run <span class="val" id="stepsVal">5</span></div>
+          <input type="range" min="1" max="20" value="5" oninput="document.getElementById('stepsVal').textContent=this.value;calcUpdate()">
+        </div>
+        <div class="calc-field">
+          <div class="calc-label">Input tokens / step <span class="val" id="inputTokVal">8000</span></div>
+          <input type="range" min="1000" max="50000" value="8000" step="500" oninput="document.getElementById('inputTokVal').textContent=this.value;calcUpdate()">
+        </div>
+        <div class="calc-field">
+          <div class="calc-label">Output tokens / step <span class="val" id="outputTokVal">800</span></div>
+          <input type="range" min="100" max="5000" value="800" step="50" oninput="document.getElementById('outputTokVal').textContent=this.value;calcUpdate()">
+        </div>
+        <div class="calc-field">
+          <div class="calc-label">Model</div>
+          <select class="calc-select" id="modelSelect" onchange="calcUpdate()">
+            <option value="haiku">Haiku 4.5 ($1 / $5)</option>
+            <option value="sonnet" selected>Sonnet 4.6 ($3 / $15)</option>
+            <option value="opus">Opus 4.6 ($5 / $25)</option>
+          </select>
+        </div>
+        <div class="calc-toggle">
+          <div style="display:flex;flex-direction:column;gap:1.1rem;">
+            <div style="display:flex;align-items:flex-start;gap:1rem;">
+              <button id="cacheToggle" onclick="this.classList.toggle('active');calcUpdate()" style="margin-top:0.1rem;">Prompt Caching</button>
+              <span style="font-size:1.05rem;color:#475569;line-height:1.5;max-width:260px;">Reuse stable context across calls — <b style='color:#6d28d9;font-weight:600;'>90% off</b> cached reads</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:1rem;">
+              <button id="batchToggle" onclick="this.classList.toggle('active');calcUpdate()" style="margin-top:0.1rem;">Batch API</button>
+              <span style="font-size:1.05rem;color:#475569;line-height:1.5;max-width:260px;">Overnight processing — <b style='color:#6d28d9;font-weight:600;'>flat 50% discount</b></span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:1rem;">
+              <button id="tierToggle" onclick="this.classList.toggle('active');calcUpdate()" style="margin-top:0.1rem;">Model Tiering</button>
+              <span style="font-size:1.05rem;color:#475569;line-height:1.5;max-width:260px;">Cheaper model for simple steps, capable model for hard ones</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+          <div class="calc-results">
+          <div class="calc-result-panel" style="min-width:320px;max-width:420px;padding:2.5rem 2rem 2rem 2rem;box-shadow:0 4px 32px 0 rgba(37,99,235,0.06);border-radius:20px;background:var(--glass2);display:flex;flex-direction:column;align-items:center;gap:1.2rem;">
+            <h4 style="font-size:1.35rem;letter-spacing:.04em;margin-bottom:.5rem">AI Cost</h4>
+            <div class="calc-big-num" id="aiCostYear" style="color:var(--blue);font-size:2.8rem;line-height:1.1;font-weight:700;letter-spacing:.02em;">—</div>
+            <div class="calc-detail" id="aiCostDetail" style="font-size:1.15rem;color:var(--text2);margin-bottom:.5rem;"></div>
+            <div class="calc-bar" style="height:12px;background:var(--glass);border-radius:8px;width:100%;margin-top:1.2rem;">
+              <div class="calc-bar-fill" id="aiCostBar" style="background:var(--blue);height:100%;width:0;border-radius:8px;"></div>
+            </div>
+          </div>
+    </div>
+    </div>
+
+    <p class="kicker">Section 4 · The calculator</p>
+  </div>
+</section>
+
+<!-- ==================== SECTION 5: OPEN vs CLOSED ==================== -->
+<div class="section-divider"></div>
+<section id="s5">
+  <div class="section-header animate-in">
+    <span class="section-num">Section 05</span>
+    <h2 class="section-title">Open Source vs<br><em>Closed Source</em></h2>
+    <p class="section-sub">The decision between open-source and closed-source AI is not a preference. It is an architecture and cost commitment with multi-year consequences.</p>
+  </div>
+
+  <!-- The Two Categories -->
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">The Two Categories</h3>
+    <div class="ovsc-columns" style="display:flex;gap:2.5rem;align-items:flex-start;justify-content:center;margin-top:2.5rem;margin-bottom:2.5rem;">
+      <div class="ovsc-col" style="flex:1 1 320px;min-width:260px;background:var(--glass);border-radius:16px;padding:2rem;box-shadow:0 2px 16px 0 rgba(37,99,235,0.06);">
+        <div class="card-icon" style="font-size:2.5rem;margin-bottom:1rem;">📦</div>
+        <h3 style="font-family:var(--font-display);font-size:1.3rem;margin-bottom:.7rem">Open-Source Agents</h3>
+        <div style="color:var(--accent2);font-size:.95rem;margin-bottom:1.2rem;">Example: Meta's Llama family</div>
+        <ul style="padding-left:1.2rem;line-height:1.7;color:var(--text2);font-size:.98rem;">
+          <li>Model weights are available for download</li>
+          <li>Can be fine-tuned and deployed on-premises</li>
+          <li>Lower cost at scale, but higher setup/maintenance</li>
+          <li>Full control over data, compliance, and updates</li>
+          <li>Community-driven innovation and support</li>
+        </ul>
+      </div>
+      <div class="ovsc-col" style="flex:1 1 320px;min-width:260px;background:var(--glass);border-radius:16px;padding:2rem;box-shadow:0 2px 16px 0 rgba(37,99,235,0.06);">
+        <div class="card-icon" style="font-size:2.5rem;margin-bottom:1rem;">🔒</div>
+        <h3 style="font-family:var(--font-display);font-size:1.3rem;margin-bottom:.7rem">Closed-Source Agents</h3>
+        <div style="color:var(--accent2);font-size:.95rem;margin-bottom:1.2rem;">Example: OpenAI, Anthropic, Google</div>
+        <ul style="padding-left:1.2rem;line-height:1.7;color:var(--text2);font-size:.98rem;">
+          <li>Model weights are not available</li>
+          <li>Access via API, managed by vendor</li>
+          <li>Higher cost per token, but lower setup/maintenance</li>
+          <li>Managed compliance, updates, and support</li>
+          <li>Faster access to latest research and features</li>
+        </ul>
+      </div>
+    </div>
+    <p class="kicker" style="margin-top:2rem">Section 5 · The two categories</p>
+  </div>
+
+  <!-- Where the Gaps Remain -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">Where the Gaps Remain</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">The capability gap between open and closed has narrowed significantly. Three gaps still matter in regulated enterprise environments.</p>
+    <div style="display:flex;flex-direction:column;gap:2.2rem;margin-bottom:2.5rem;">
+      <div style="background:var(--glass);border-radius:14px;padding:1.7rem 2rem;box-shadow:0 2px 16px 0 rgba(37,99,235,0.06);display:flex;align-items:flex-start;gap:1.5rem;">
+        <div class="card-icon" style="font-size:2.2rem;">🎯</div>
+        <div>
+          <h3 style="font-family:var(--font-display);font-size:1.15rem;margin-bottom:.3rem">Agentic Precision</h3>
+          <div style="color:var(--accent2);font-size:.98rem;margin-bottom:.5rem;">Multi-step tool use accuracy</div>
+          <div style="color:var(--text2);font-size:.98rem;">Closed-source models are specifically tuned for multi-step tool use. Open-source models produce incorrect parameters more frequently. In workflows touching financial systems, this gap carries operational risk.</div>
+        </div>
+      </div>
+      <div style="background:var(--glass);border-radius:14px;padding:1.7rem 2rem;box-shadow:0 2px 16px 0 rgba(37,99,235,0.06);display:flex;align-items:flex-start;gap:1.5rem;">
+        <div class="card-icon" style="font-size:2.2rem;">🛡️</div>
+        <div>
+          <h3 style="font-family:var(--font-display);font-size:1.15rem;margin-bottom:.3rem">Governance</h3>
+          <div style="color:var(--accent2);font-size:.98rem;margin-bottom:.5rem;">Audit logs, identity, safety</div>
+          <div style="color:var(--text2);font-size:.98rem;">Closed-source vendors include managed identity, immutable audit logs, permission scopes, and safety controls as part of the product. With open-source, this entire layer is built and maintained internally — including every update, patch, and compliance review.</div>
+        </div>
+      </div>
+      <div style="background:var(--glass);border-radius:14px;padding:1.7rem 2rem;box-shadow:0 2px 16px 0 rgba(37,99,235,0.06);display:flex;align-items:flex-start;gap:1.5rem;">
+        <div class="card-icon" style="font-size:2.2rem;">⏱️</div>
+        <div>
+          <h3 style="font-family:var(--font-display);font-size:1.15rem;margin-bottom:.3rem">Time to Production</h3>
+          <div style="color:var(--accent2);font-size:.98rem;margin-bottom:.5rem;">Days vs months</div>
+          <div style="color:var(--text2);font-size:.98rem;">Closed-source: days to weeks. Open-source: weeks to months for anything in a regulated environment. The model has no licensing cost. The engineering required to surround it does.</div>
+        </div>
+      </div>
+    </div>
+    <p class="kicker">Section 5 · Where the gaps remain</p>
+  </div>
+
+  <!-- 4.3 Cost Structure -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">Where the Cost Actually Sits</h3>
+    <div class="cost-toggle-container">
+      <div class="ovsc-toggle" style="margin-bottom:1.5rem">
+        <button class="active" onclick="switchCostView(this,'closed')">Closed Source</button>
+        <button onclick="switchCostView(this,'open')">Open Source</button>
+      </div>
+      <div class="cost-bars" id="costBars"></div>
+    </div>
+  </div>
+
+  <!-- 4.4 Decision Framework -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">The Decision Framework</h3>
+    <p style="color:var(--text2);margin-bottom:1.5rem">Answer five questions to see a recommendation for your workload.</p>
+    <div class="decision-tool" id="decisionTool"></div>
+    <div class="decision-result" id="decisionResult">
+      <h4>Answer the questions above</h4>
+      <p>A recommendation will appear as you select answers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CONCLUSION ==================== -->
+<div class="section-divider"></div>
+<section id="s6">
+  <div class="section-header animate-in">
+    <span class="section-num">Conclusion</span>
+    <h2 class="section-title">What We <em>Learnt</em></h2>
+    <p class="section-sub">The four questions we opened with, now answered.</p>
+  </div>
+
+  <div class="conclusion-items animate-in">
+    <div class="concl-item">
+      <div class="concl-num">01</div>
+      <h4>AI is a powerful tool, with real limits.</h4>
+      <p>It works where inputs are unstructured, rules are fuzzy, and a human can review before action. It is the wrong tool where inputs are structured, rules are codified, or a single wrong answer carries financial, legal, or safety consequences.</p>
+    </div>
+    <div class="concl-item">
+      <div class="concl-num">02</div>
+      <h4>Putting AI to work takes deliberate architecture.</h4>
+      <p>A handbook that governs definitions. A map that declares relationships. A discipline that enforces determinism. Without these, the model produces answers the business cannot rely on.</p>
+    </div>
+    <div class="concl-item">
+      <div class="concl-num">03</div>
+      <h4>This is a leadership question.</h4>
+      <p>AI deployment is a decision about where the business commits operating expense, where governance sits, and which workflows are redesigned. These decisions do not belong in the IT function alone.</p>
+    </div>
+    <div class="concl-item">
+      <div class="concl-num">04</div>
+      <h4>AI has a cost, and the trade-offs are real.</h4>
+      <p>Tokens, agentic inflation, model choice, and optimisation levers all move the bill. The choice between open and closed source commits the business to a cost structure and a governance model for years.</p>
+    </div>
+  </div>
+
+  <!-- Call to Action -->
+  <div class="section-divider"></div>
+  <div class="animate-in">
+    <h3 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem">What to do next.</h3>
+    <div class="cta-steps">
+      <div class="cta-step">
+        <span class="cta-step-num">1.</span>
+        <div class="cta-step-content">
+          <h4>Assess your workflows.</h4>
+          <p>Identify where the business needs deterministic, repeatable answers — and separate those from the work where approximate answers are acceptable.</p>
+        </div>
+      </div>
+      <div class="cta-step">
+        <span class="cta-step-num">2.</span>
+        <div class="cta-step-content">
+          <h4>Audit your systems for readiness.</h4>
+          <p>Check whether the data sources, definitions, and relationships an AI system would depend on are in a state to be trusted. Most are not, yet.</p>
+        </div>
+      </div>
+      <div class="cta-step">
+        <span class="cta-step-num">3.</span>
+        <div class="cta-step-content">
+          <h4>Build the foundation layer.</h4>
+          <p>The handbook, the map, the review discipline. None of this is AI-specific. All of it is prerequisite.</p>
+        </div>
+      </div>
+      <div class="cta-step">
+        <span class="cta-step-num">4.</span>
+        <div class="cta-step-content">
+          <h4>Run small, reversible pilots.</h4>
+          <p>Pick one workflow that passes the filter. Build against the architecture. Measure the outcome. Use what you learn to scope the next one.</p>
+        </div>
+      </div>
+    </div>
+    <!-- <p class="kicker">Conclusion · Call to action</p> -->
+  </div>
+</section>
+
+<footer>
+
+<section id="s7" style="margin-top:4rem;">
+
+  <!-- HEADER -->
+  <div class="section-header animate-in" style="text-align:center;max-width:800px;margin:auto;">
+    <span class="section-num">Case Study</span>
+    <h2 class="section-title">AI in Action: Document Intelligence for NBFC</h2>
+    <p class="section-sub">Transforming a 60-minute manual process into a real-time intelligent workflow</p>
+  </div>
+
+  <!-- PROBLEM VS SOLUTION -->
+  <div style="display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-top:3rem;">
+
+    <!-- Problem -->
+    <div style="flex:1 1 350px;max-width:480px;background:#fff7ed;border-radius:20px;padding:2rem;border:1px solid #fed7aa;">
+      <h3 style="color:#ea580c;margin-bottom:1rem;">⚠️ The Challenge</h3>
+      <ul style="color:#7c2d12;line-height:1.8;">
+        Manual data entry per case<br>
+     30–60 mins per application<br>
+       High transcription errors<br>
+       No compliance validation<br>
+    No audit traceability<br>
+      </ul>
+    </div>
+
+    <!-- Solution -->
+    <div style="flex:1 1 350px;max-width:480px;background:#eff6ff;border-radius:20px;padding:2rem;border:1px solid #bfdbfe;">
+      <h3 style="color:#2563eb;margin-bottom:1rem;">🚀 The Solution</h3>
+      <ul style="color:#1e3a8a;line-height:1.8;">
+       AI auto-classifies documents<br>
+Extracts structured data instantly<br>
+Real-time discrepancy detection<br>
+Human-in-the-loop validation<br>
+Seamless LOS integration<br>
+End-to-end audit trail<br>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- PROCESS (PROOF OF WORK) -->
+  <div style="margin-top:4rem;text-align:center;">
+    <h3 style="color:#059669;margin-bottom:1rem;">🔍 How It Works</h3>
+    <p style="color:#64748b;margin-bottom:2rem;">From document upload to decision-ready data in seconds</p>
+
+    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+      <img src="https://i.postimg.cc/sgZDkcm3/Arka-Process-Flow.png" style="width:100%;border-radius:16px;" />
+      <img src="https://i.postimg.cc/Z5gjRT6J/pow1.png" style="width:100%;border-radius:16px;" />
+      <img src="https://i.postimg.cc/1t0KJw20/pow2.png" style="width:100%;border-radius:16px;" />
+    </div>
+  </div>
+
+
+  <!-- COST (POSITIONED AS ROI) -->
+  <div style="margin-top:4rem;display:flex;justify-content:center;">
+    <div style="background:#ecfdf5;border-radius:20px;padding:2rem 3rem;max-width:900px;width:100%;">
+      
+      <h3 style="color:#047857;margin-bottom:1rem;">💸 Cost</h3>
+
+      <ul style="color:#065f46;line-height:1.8;">
+Average Input Token Per Page: ~ 6000, Cost: ~0.16 Rupees<br>
+Average Output Token Per Page: ~ 500, Cost: ~0.14 Rupees<br>
+Average Cost for One Page: ~0.3 Rupees<br>
+One Government Doc, such as PAN Card, Aadhar Card costs 0.3 Rupees to verify<br>
+One Loan Agreement Document, with 18 Pages costs ~5.4 Rupees<br>
+      </ul>
+
+    </div>
+  </div>
+
+</section>
+
+  <footer>
+    <p style="font-family:var(--font-display);font-size:1.4rem;color:var(--text);margin-bottom:1rem">Built for leaders who build.</p>
+    <p>AI Strategy for the Enterprise · April 2026</p>
+     <p>wwww.kondana.ai</p>
+  </footer>
+
+<script>
+// ===== SCROLL ANIMATIONS =====
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})
+},{threshold:.1});
+document.querySelectorAll('.animate-in').forEach(el=>observer.observe(el));
+
+// ===== PROGRESS BAR =====
+window.addEventListener('scroll',()=>{
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progressBar').style.width = (window.scrollY/h*100)+'%';
+  const sections = ['s1','s2','s3','s4','s5','s6','s7'];
+  const links = document.querySelectorAll('.nav-links a');
+  sections.forEach((id,i)=>{
+    const el = document.getElementById(id);
+    if(el && window.scrollY >= el.offsetTop - 200) links.forEach((l,j)=>{l.classList.toggle('active',j===i)});
+  });
+});
+
+// ===== CARD REVEAL =====
+function toggleReveal(card){
+  const r = card.querySelector('.card-reveal');
+  r.classList.toggle('open');
+  const hint = card.querySelector('.click-hint');
+  if(hint) hint.style.display = r.classList.contains('open') ? 'none' : 'block';
+}
+
+// ===== FLOW INFO =====
+function toggleFlowInfo(node, id){
+  document.querySelectorAll('.flow-node-info').forEach(el=>el.classList.remove('visible'));
+  document.getElementById(id).classList.toggle('visible');
+}
+
+// ===== TOKEN ANIMATION =====
+function animateTokens(){
+  const stream = document.getElementById('tokenStream');
+  const cost = document.getElementById('tokenCost');
+  stream.innerHTML = '';cost.innerHTML = '';
+  const inputWords = ['[SYS]','Review','this','contract','against','company','standard.','Flag','deviations.','[CONTEXT]','Standard_terms_v3...','revenue_clause...','liability_cap...','indemnity...','[DOC]','Vendor_contract_2024.pdf','Section_1...','Section_2...','Section_3...','warranties...'];
+  const outputWords = ['Clause','4.2:','liability','cap','deviates.','Standard:','₹10Cr.','Contract:','unlimited.','[FLAG]','Recommend','review.'];
+  let idx = 0;
+  inputWords.forEach((w,i)=>{
+    setTimeout(()=>{
+      const span = document.createElement('span');
+      span.className = 'token input-token';
+      span.textContent = w;
+      stream.appendChild(span);
+      setTimeout(()=>span.classList.add('visible'),20);
+    }, i*80);
+  });
+  setTimeout(()=>{
+    outputWords.forEach((w,i)=>{
+      setTimeout(()=>{
+        const span = document.createElement('span');
+        span.className = 'token output-token';
+        span.textContent = w;
+        stream.appendChild(span);
+        setTimeout(()=>span.classList.add('visible'),20);
+      }, i*100);
+    });
+    setTimeout(()=>{
+      cost.innerHTML =  'Output costs ~5× more per token';
+    }, outputWords.length * 100 + 200);
+  }, inputWords.length * 80 + 300);
+}
+
+
+// ===== MENTAL MODEL TOGGLE =====
+function switchModel(btn, which){
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('currentModel').style.display = which==='current' ? 'block' : 'none';
+  document.getElementById('accurateModel').style.display = which==='accurate' ? 'block' : 'none';
+}
+
+// ===== NEW HIRE REVEAL =====
+let revealIdx = 0;
+function revealNext(){
+  const items = document.querySelectorAll('#newHireList .reveal-item');
+  if(revealIdx < items.length){
+    items[revealIdx].classList.add('revealed');
+    revealIdx++;
+    if(revealIdx === items.length){
+      document.getElementById('revealPunchline').style.opacity = '1';
+      document.querySelector('.reveal-btn').textContent = '✓ All revealed';
+      document.querySelector('.reveal-btn').disabled = true;
+    }
+  }
+}
+
+
+
+// ===== SEMANTIC LAYER =====
+const termData = {
+  revenue: {
+    conflicts: [
+      {sys:'PowerBI', def:'Sum of all invoices issued in the quarter'},
+      {sys:'Excel Model', def:'Cash received minus refunds'},
+      {sys:'RDBMS', def:'GL account 4000 balance at period close'}
+    ],
+    resolved: 'Approved SQL view: GL account 4000, accrual basis, at period close'
+  },
+  customer: {
+    conflicts: [
+      {sys:'CRM', def:'Any record with a login in the last 90 days'},
+      {sys:'Billing', def:'Account with at least one paid invoice'},
+      {sys:'Support', def:'User who submitted a ticket this year'}
+    ],
+    resolved: 'Governed definition: Account with ≥1 paid invoice and login within 90 days'
+  },
+  status: {
+    conflicts: [
+      {sys:'Project PDF', def:'Green / Amber / Red based on PM assessment'},
+      {sys:'Jira', def:'% of tickets closed vs total'},
+      {sys:'Email', def:'"On track" per last steering committee'}
+    ],
+    resolved: 'Single source: PMO status register, updated weekly, linked to milestone tracker'
+  }
+};
+function selectTerm(term, btn){
+  document.querySelectorAll('.term-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const data = termData[term];
+  const panel = document.getElementById('conflictPanel');
+  const resolved = document.getElementById('resolvedCard');
+  const resolvedVal = document.getElementById('resolvedValue');
+  panel.innerHTML = '';
+  resolved.classList.remove('visible');
+  data.conflicts.forEach((c,i)=>{
+    const div = document.createElement('div');
+    div.className = 'conflict-card';
+    div.innerHTML = `<div class="sys">${c.sys}</div><div class="def">${c.def}</div>`;
+    panel.appendChild(div);
+    setTimeout(()=>div.classList.add('visible'), i*200);
+  });
+  setTimeout(()=>{
+    resolvedVal.textContent = data.resolved;
+    resolved.classList.add('visible');
+  }, data.conflicts.length * 200 + 400);
+}
+selectTerm('revenue', document.querySelector('.term-btn'));
+
+// ===== 8-QUESTION FILTER =====
+const filterQuestions = [
+  {q:'What kind of input does the system receive?',badge:'standard',opts:[
+    {text:'Structured data — numbers in defined fields',color:'red'},
+    {text:'Mostly structured with some free text',color:'yellow'},
+    {text:'Mostly unstructured — documents, language, images',color:'green'}
+  ]},
+  {q:'How clear are the rules that govern the right answer?',badge:'standard',opts:[
+    {text:'Fully codified — the rulebook exists',color:'red'},
+    {text:'Partially codified — some judgment required',color:'yellow'},
+    {text:'Fuzzy — the answer depends on context',color:'green'}
+  ]},
+  {q:'What happens if the answer is wrong?',badge:'veto',opts:[
+    {text:'Financial, legal, or safety consequence',color:'red'},
+    {text:'Noticeable cost but recoverable',color:'yellow'},
+    {text:'Minor — one item out of thousands',color:'green'}
+  ]},
+  {q:'Can the answer be reversed after it is acted on?',badge:'veto',opts:[
+    {text:'No — once it happens, it happens',color:'red'},
+    {text:'Yes, with effort',color:'yellow'},
+    {text:'Yes, easily and automatically',color:'green'}
+  ]},
+  {q:'Does a deterministic alternative already exist?',badge:'high',opts:[
+    {text:'Yes — a dashboard or tool already answers this',color:'red'},
+    {text:'Yes, but slow, fragmented, or hard to use',color:'yellow'},
+    {text:'No — cannot be answered today',color:'green'}
+  ]},
+  {q:'Can the output be verified against a source of truth?',badge:'high',opts:[
+    {text:'No — nothing to check it against',color:'red'},
+    {text:'Partially — some cases can be verified',color:'yellow'},
+    {text:'Yes — every answer traces to a source',color:'green'}
+  ]},
+  {q:'Is a human reviewing before action is taken?',badge:'standard',opts:[
+    {text:'No — the AI acts directly',color:'red'},
+    {text:'Sometimes — sampling or exception review',color:'yellow'},
+    {text:'Yes — every output is reviewed',color:'green'}
+  ]},
+  {q:'Is the problem actually a process problem?',badge:'veto',opts:[
+    {text:'Yes — AI is papering over a broken process',color:'red'},
+    {text:'Partially — AI helps but process needs work too',color:'yellow'},
+    {text:'No — process is sound, AI adds capability',color:'green'}
+  ]}
+];
+const filterAnswers = new Array(8).fill(null);
+function buildFilter(){
+  const container = document.getElementById('filterContainer');
+  container.innerHTML = '';
+  filterQuestions.forEach((fq,i)=>{
+    const div = document.createElement('div');
+    div.className = 'filter-q';
+    let badgeClass = fq.badge==='veto' ? 'badge-veto' : fq.badge==='high' ? 'badge-high' : 'badge-standard';
+    let badgeText = fq.badge.toUpperCase();
+    div.innerHTML = `
+      <div class="filter-q-header">
+        <span class="filter-q-num">Q${i+1}</span>
+        <span class="filter-q-badge ${badgeClass}">${badgeText}</span>
+      </div>
+      <div class="filter-q-text">${fq.q}</div>
+      <div class="filter-options">
+        ${fq.opts.map((o,j)=>`
+          <div class="filter-opt" onclick="selectFilterOpt(${i},${j},'${o.color}',this)">
+            <div class="filter-dot ${o.color}"></div>
+            <span>${o.text}</span>
+          </div>
+        `).join('')}
+      </div>`;
+    container.appendChild(div);
+  });
+}
+buildFilter();
+function selectFilterOpt(qi,oi,color,el){
+  const q = el.closest('.filter-q');
+  q.querySelectorAll('.filter-opt').forEach(o=>o.className='filter-opt');
+  el.classList.add(`selected-${color}`);
+  filterAnswers[qi] = color;
+  updateVerdict();
+}
+function updateVerdict(){
+  const panel = document.getElementById('verdictPanel');
+  const answered = filterAnswers.filter(a=>a!==null);
+  if(answered.length === 0){
+    panel.className='verdict-panel';
+    panel.innerHTML='<div class="verdict-emoji">🔘</div><div class="verdict-text">Answer the questions above</div><div class="verdict-desc">Select at least one answer to see your verdict.</div>';
+    return;
+  }
+  const vetoIndices = [2,3,7];
+  const hasVeto = vetoIndices.some(i=>filterAnswers[i]==='red');
+  const reds = filterAnswers.filter(a=>a==='red').length;
+  const greens = filterAnswers.filter(a=>a==='green').length;
+  if(hasVeto || reds > greens){
+    panel.className='verdict-panel red';
+    panel.innerHTML='<div class="verdict-emoji">🔴</div><div class="verdict-text">Do Not Proceed</div><div class="verdict-desc">'+(hasVeto?'Veto triggered. ':'')+'Use code, rules engine, or dashboard instead. Address process issues first.</div>';
+  } else if(greens > reds + filterAnswers.filter(a=>a==='yellow').length){
+    panel.className='verdict-panel green';
+    panel.innerHTML='<div class="verdict-emoji">🟢</div><div class="verdict-text">Proceed</div><div class="verdict-desc">No vetoes. Majority green. AI is appropriate. Build against governed architecture.</div>';
+  } else {
+    panel.className='verdict-panel yellow';
+    panel.innerHTML='<div class="verdict-emoji">🟡</div><div class="verdict-text">Proceed with Caution</div><div class="verdict-desc">No vetoes, but mixed signals. Scope a small, reversible pilot with clear exit criteria.</div>';
+  }
+}
+
+// ===== CALCULATOR =====
+const pricing = {
+  haiku:{input:1,output:5,cached:0.1},
+  sonnet:{input:3,output:15,cached:0.3},
+  opus:{input:5,output:25,cached:0.5}
+};
+function fmt(n){
+  const sym = '$';
+  const val = n;
+  if(val >= 1e7) return sym + (val/1e7).toFixed(2) + 'M';
+  if(val >= 1e5) return sym + (val/1e5).toFixed(2) + 'L';
+  if(val >= 1000) return sym + (val/1000).toFixed(1) + 'K';
+  return sym + val.toFixed(2);
+}
+function calcUpdate(){
+  const runs = +document.getElementById('runsVal').textContent;
+  const steps = +document.getElementById('stepsVal').textContent;
+  const inputTok = +document.getElementById('inputTokVal').textContent;
+  const outputTok = +document.getElementById('outputTokVal').textContent;
+  const model = document.getElementById('modelSelect').value;
+  const caching = document.getElementById('cacheToggle').classList.contains('active');
+  const batch = document.getElementById('batchToggle').classList.contains('active');
+  const tiering = document.getElementById('tierToggle').classList.contains('active');
+  // Human cost fields removed
+  let p = {...pricing[model]};
+  let effectiveInputPrice = p.input;
+  let effectiveOutputPrice = p.output;
+  if(tiering){
+    effectiveInputPrice = 0.6 * pricing.haiku.input + 0.4 * p.input;
+    effectiveOutputPrice = 0.6 * pricing.haiku.output + 0.4 * p.output;
+  }
+  let totalInputPerRun = 0;
+  for(let s = 1; s <= steps; s++) totalInputPerRun += inputTok * s;
+  let totalOutputPerRun = outputTok * steps;
+  let inputCostPerRun = (totalInputPerRun / 1e6) * effectiveInputPrice;
+  let outputCostPerRun = (totalOutputPerRun / 1e6) * effectiveOutputPrice;
+  if(caching) inputCostPerRun *= 0.3;
+  let aiCostPerRun = inputCostPerRun + outputCostPerRun;
+  if(batch) aiCostPerRun *= 0.5;
+  const aiCostDay = aiCostPerRun * runs;
+  const aiCostYear = aiCostDay * 260;
+  // Human cost calculations removed
+  document.getElementById('aiCostYear').textContent = fmt(aiCostYear);
+  document.getElementById('aiCostDetail').textContent = `${fmt(aiCostPerRun)}/run · ${fmt(aiCostDay)}/day`;
+  document.getElementById('aiCostBar').style.width = '100%';
+}
+calcUpdate();
+
+// ===== OPEN VS CLOSED =====
+const ovscData = {
+  open: {
+    title: 'Open-Source Agents — Example: Meta\'s Llama family',
+    items: [
+      {icon:'📦', text:'Model weights are available for download'},
+      {icon:'🏠', text:'The model runs on infrastructure you control'},
+      {icon:'⚙️', text:'Governance, monitoring, and safety are your responsibility to build'},
+      {icon:'💰', text:'No licensing cost for the model itself'},
+      {icon:'🔧', text:'Frameworks available to modify'}
+    ]
+  },
+  closed: {
+    title: 'Closed-Source Agents — Example: Anthropic\'s Claude',
+    items: [
+      {icon:'☁️', text:'A managed service accessed through an API'},
+      {icon:'🏭', text:'The model runs on the vendor\'s infrastructure'},
+      {icon:'🛡️', text:'Governance, monitoring, and safety are part of the product'},
+      {icon:'💳', text:'Metered per-token recurring cost'},
+      {icon:'🔒', text:'No access to model weights or internals'}
+    ]
+  }
+};
+// ovscData kept for reference; static HTML columns are used in the DOM instead
+
+// ===== COST STRUCTURE =====
+const costData = {
+  closed:[
+    {label:'Model cost (tokens)',pct:60,color:'var(--blue)'},
+    {label:'Governance',pct:5,color:'var(--accent2)'},
+    {label:'Engineering',pct:15,color:'var(--yellow)'},
+    {label:'Ongoing ops',pct:20,color:'var(--text3)'}
+  ],
+  open:[
+    {label:'Model cost (tokens)',pct:10,color:'var(--blue)'},
+    {label:'Governance (internal)',pct:30,color:'var(--accent2)'},
+    {label:'Engineering',pct:45,color:'var(--yellow)'},
+    {label:'Ongoing ops',pct:25,color:'var(--text3)'}
+  ]
+};
+
+function switchCostView(btn, type){
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const bars = document.getElementById('costBars');
+  bars.innerHTML = costData[type].map(d=>`
+    <div class="cost-bar-row">
+      <div class="cost-bar-label">${d.label}</div>
+      <div class="cost-bar-track">
+        <div class="cost-bar-fill2" style="width:${d.pct}%;background:${d.color}">${d.pct}%</div>
+      </div>
+    </div>`).join('');
+}
+// Initialise cost bars immediately after definition
+const firstCostBtn = document.querySelector('.cost-toggle-container .ovsc-toggle button');
+if(firstCostBtn) switchCostView(firstCostBtn, 'closed');
+
+// ===== DECISION FRAMEWORK =====
+const decisionQs = [
+  {q:'How sensitive is the data?',opts:['Public / low','Regulated / financial']},
+  {q:'How autonomous is the agent?',opts:['Human reviews all','Acts without review']},
+  {q:'Do you have MLOps/platform engineering?',opts:['Yes, mature team','No / limited']},
+  {q:'How quickly must it be in production?',opts:['Weeks','Months OK']},
+  {q:'Where should cost sit?',opts:['Predictable recurring','Upfront + internal']}
+];
+const decisionState = new Array(5).fill(null);
+function buildDecisionTool(){
+  const container = document.getElementById('decisionTool');
+  container.innerHTML = '';
+  decisionQs.forEach((dq,i)=>{
+    const div = document.createElement('div');
+    div.className = 'decision-q';
+    div.innerHTML = `<div class="decision-q-text">${i+1}. ${dq.q}</div>
+      <div class="decision-opts">${dq.opts.map((o,j)=>`<div class="decision-opt" onclick="selectDecision(${i},${j},this)">${o}</div>`).join('')}</div>`;
+    container.appendChild(div);
+  });
+}
+buildDecisionTool();
+
+
+function selectDecision(qi,oi,el){
+  el.parentElement.querySelectorAll('.decision-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  decisionState[qi] = oi;
+  updateDecisionResult();
+}
+function updateDecisionResult(){
+  const panel = document.getElementById('decisionResult');
+  const answered = decisionState.filter(a=>a!==null).length;
+  if(answered < 3){panel.innerHTML='<h4>Keep answering...</h4><p>A recommendation will appear.</p>';return;}
+  const openScore = decisionState.filter(a=>a===0).length;
+  const closedScore = decisionState.filter(a=>a===1).length;
+  if(openScore > closedScore + 1){
+    panel.innerHTML = '<h4 style="color:var(--accent2)">Open Source Viable</h4><p>Your org has the capacity and timeline. Open-source offers better long-run cost profile for this workload.</p>';
+    panel.style.borderColor = 'var(--accent2)';
+  } else if(closedScore > openScore + 1){
+    panel.innerHTML = '<h4 style="color:var(--blue)">Closed Source Recommended</h4><p>Governance requirements, timeline, or capacity favour a managed service. Predictable cost, faster to production.</p>';
+    panel.style.borderColor = 'var(--blue)';
+  } else {
+    panel.innerHTML = '<h4 style="color:var(--yellow)">Either Is Viable</h4><p>Mixed signals. Both categories can work. Decide per-workload based on which constraints matter most.</p>';
+    panel.style.borderColor = 'var(--yellow)';
+  }
+}
+</script>
+</body>
+</html>
